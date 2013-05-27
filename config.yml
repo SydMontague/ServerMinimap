@@ -1,0 +1,8 @@
+scale: 0
+chucksPerRun: 4
+runPerTicks: 5
+fastTicks: 20
+canSeeOthers: true
+colors:
+    GRASS: 10
+    LEAVES: 30

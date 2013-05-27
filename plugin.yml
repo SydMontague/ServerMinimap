@@ -1,0 +1,9 @@
+name: ServerMinimap
+main: de.craftlancer.minimap.Minimap
+version: 0.3
+author: SydMontague
+description: POC
+permissions:
+    minimap.fastupdate:
+        description: Updates the minimap of the player much faster
+        default: false
