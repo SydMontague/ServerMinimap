@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Minimap extends JavaPlugin
 {
-    public static final short MAPID = 0;
+    public static short MAPID = 0;
     private FileConfiguration config;
     private Map<Integer, Byte> colorMap = new HashMap<Integer, Byte>();
     private int SCALE = 0;
@@ -78,9 +78,11 @@ public class Minimap extends JavaPlugin
     private void loadMap()
     {
         MapView map = getServer().getMap((short) 0);
-        
         if (map == null)
             map = getServer().createMap(getServer().getWorlds().get(0));
+        
+        if(map.getId() != 0)
+            getLogger().severe("Created Map has not Id 0 while map 0 is non existent! PLEASE REPORT TO ME!!!");
         
         if (!(map.getRenderers().get(0) instanceof AlternativeRenderer))
         {

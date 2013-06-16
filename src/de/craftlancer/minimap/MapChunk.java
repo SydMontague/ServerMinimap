@@ -1,10 +1,10 @@
 package de.craftlancer.minimap;
 
-public class MapChuck
+public class MapChunk
 {
     byte cache[][] = new byte[16][16];
     
-    public MapChuck()
+    public MapChunk()
     {
         for (int i = 0; i < 16; i++)
             for (int j = 0; j < 16; j++)

@@ -29,7 +29,7 @@ import org.bukkit.map.MapView;
 
 public class AlternativeRenderer extends MapRenderer implements Listener
 {
-    private Map<Integer, Map<Integer, MapChuck>> cacheMap = new TreeMap<Integer, Map<Integer, MapChuck>>();
+    private Map<Integer, Map<Integer, MapChunk>> cacheMap = new TreeMap<Integer, Map<Integer, MapChunk>>();
     protected Queue<Coords> queue = new LinkedList<Coords>();
     private RenderTask cacheTask = new RenderTask(this);
     private SendTask sendTask = new SendTask();
@@ -47,14 +47,14 @@ public class AlternativeRenderer extends MapRenderer implements Listener
         this.plugin = plugin;
         this.cpr = cpr;
         this.world = world;
-        
-        cacheTask.runTaskTimer(plugin, plugin.runPerTicks, plugin.runPerTicks);
-        sendTask.runTaskTimer(plugin, plugin.fastTicks, plugin.fastTicks);
-        
+                
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         
         this.scale = (scale < 1 || scale > 4) ? 1 : (int) Math.pow(2, scale);
-        colorlimit = (this.scale * this.scale) / 2;
+        this.colorlimit = (this.scale * this.scale) / 2;        
+
+        this.cacheTask.runTaskTimer(plugin, plugin.runPerTicks, plugin.runPerTicks);
+        this.sendTask.runTaskTimer(plugin, plugin.fastTicks, plugin.fastTicks);
     }
     
     @Override
@@ -83,10 +83,8 @@ public class AlternativeRenderer extends MapRenderer implements Listener
                 catch (NullPointerException e)
                 {
                     canvas.setPixel(i, j, (byte) 0);
-                    if (queue.size() < 200)
+                    if (queue.size() < 500)
                         addToQueue(x, z, true);
-                    else
-                        plugin.getLogger().info("kk");
                 }
             }
         
@@ -136,12 +134,12 @@ public class AlternativeRenderer extends MapRenderer implements Listener
     public void loadData(int x, int z)
     {
         if (!cacheMap.containsKey(x))
-            cacheMap.put(x, new TreeMap<Integer, MapChuck>());
+            cacheMap.put(x, new TreeMap<Integer, MapChunk>());
         
         if (!cacheMap.get(x).containsKey(z))
-            cacheMap.get(x).put(z, new MapChuck());
+            cacheMap.get(x).put(z, new MapChunk());
         
-        MapChuck map = cacheMap.get(x).get(z);
+        MapChunk map = cacheMap.get(x).get(z);
         
         int initX = x * scale * 16;
         int initZ = z * scale * 16;
@@ -167,12 +165,12 @@ public class AlternativeRenderer extends MapRenderer implements Listener
         int sz = Math.abs((locZ + 16 * Math.abs(z))) % 16;
         
         if (!cacheMap.containsKey(x))
-            cacheMap.put(x, new TreeMap<Integer, MapChuck>());
+            cacheMap.put(x, new TreeMap<Integer, MapChunk>());
         
         if (!cacheMap.get(x).containsKey(z))
-            cacheMap.get(x).put(z, new MapChuck());
+            cacheMap.get(x).put(z, new MapChunk());
         
-        MapChuck map = cacheMap.get(x).get(z);
+        MapChunk map = cacheMap.get(x).get(z);
         map.set(sx, sz, renderBlock((x * 16 + sx) * scale, (z * 16 + sz) * scale));
     }
     
