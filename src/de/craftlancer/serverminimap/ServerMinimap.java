@@ -1,4 +1,4 @@
-package de.craftlancer.minimap;
+package de.craftlancer.serverminimap;
 
 import java.io.File;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * 
  * @author Syd
  */
-public class Minimap extends JavaPlugin
+public class ServerMinimap extends JavaPlugin
 {
     public static short MAPID = 0;
     private FileConfiguration config;

@@ -1,4 +1,4 @@
-package de.craftlancer.minimap;
+package de.craftlancer.serverminimap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,9 +20,9 @@ class MinimapRenderer extends MapRenderer implements Listener
     
     int scale = 0;
     int lpr = 1;
-    Minimap plugin;
+    ServerMinimap plugin;
     
-    public MinimapRenderer(int scale, Minimap plugin, int linesperrun)
+    public MinimapRenderer(int scale, ServerMinimap plugin, int linesperrun)
     {
         super(true);
         

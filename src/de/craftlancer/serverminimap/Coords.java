@@ -1,4 +1,4 @@
-package de.craftlancer.minimap;
+package de.craftlancer.serverminimap;
 
 public class Coords
 {

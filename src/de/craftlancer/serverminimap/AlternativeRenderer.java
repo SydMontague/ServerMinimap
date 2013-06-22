@@ -1,4 +1,4 @@
-package de.craftlancer.minimap;
+package de.craftlancer.serverminimap;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -37,10 +37,10 @@ public class AlternativeRenderer extends MapRenderer implements Listener
     protected int scale = 0;
     protected int cpr = 0;
     private int colorlimit;
-    protected Minimap plugin;
+    protected ServerMinimap plugin;
     private World world;
     
-    public AlternativeRenderer(int scale, int cpr, World world, Minimap plugin)
+    public AlternativeRenderer(int scale, int cpr, World world, ServerMinimap plugin)
     {
         super(true);
         

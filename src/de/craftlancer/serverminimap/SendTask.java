@@ -1,4 +1,4 @@
-package de.craftlancer.minimap;
+package de.craftlancer.serverminimap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +12,7 @@ public class SendTask extends BukkitRunnable
     {
         for (Player p : Bukkit.getOnlinePlayers())
             if (p.hasPermission("minimap.fastupdate"))
-                if (p.getItemInHand().getType() == Material.MAP && p.getItemInHand().getDurability() == Minimap.MAPID)
+                if (p.getItemInHand().getType() == Material.MAP && p.getItemInHand().getDurability() == ServerMinimap.MAPID)
                     p.sendMap(Bukkit.getMap((short) 0));
     }
     

@@ -1,4 +1,4 @@
-package de.craftlancer.minimap;
+package de.craftlancer.serverminimap;
 
 import org.bukkit.scheduler.BukkitRunnable;
 

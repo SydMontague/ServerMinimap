@@ -1,5 +1,5 @@
 name: ServerMinimap
-main: de.craftlancer.minimap.Minimap
+main: de.craftlancer.serverminimap.ServerMinimap
 version: 0.3
 author: SydMontague
 description: POC
