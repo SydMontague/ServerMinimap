@@ -6,6 +6,7 @@ import java.util.Queue;
 import java.util.TreeMap;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -60,7 +61,7 @@ public class AlternativeRenderer extends MapRenderer implements Listener
     @Override
     public void render(MapView map, MapCanvas canvas, Player player)
     {
-        if (!player.getWorld().equals(world))
+        if (!player.getWorld().equals(world) || !(player.getItemInHand().getType() == Material.MAP && player.getItemInHand().getDurability() == ServerMinimap.MAPID))
             return;
         
         int locX = player.getLocation().getBlockX() / scale - 64;
@@ -76,11 +77,10 @@ public class AlternativeRenderer extends MapRenderer implements Listener
                 if (locZ + j < 0 && (locZ + j) % 16 != 0)
                     z--;
                 
-                try
-                {
+                
+                if(cacheMap.get(x) != null && cacheMap.get(x).get(z) != null)
                     canvas.setPixel(i, j, (byte) (cacheMap.get(x).get(z).get(Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16) % 55));
-                }
-                catch (NullPointerException e)
+                else
                 {
                     canvas.setPixel(i, j, (byte) 0);
                     if (queue.size() < 200)

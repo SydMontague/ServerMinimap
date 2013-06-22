@@ -13,7 +13,7 @@ public class RenderTask extends BukkitRunnable
     
     @Override
     public void run()
-    {
+    {        
         int chunks = 0;
         int blocks = 0;
         
