@@ -42,7 +42,7 @@ public class ServerMinimap extends JavaPlugin
         config = getConfig();
         
         SCALE = config.getInt("scale", 0);
-        CPR = config.getInt("chucksPerRun", 4);
+        CPR = config.getInt("chunksPerRun", 4);
         runPerTicks = config.getInt("runPerTicks", 1);
         fastTicks = config.getInt("fastTicks", 20);
         canSeeOthers = config.getBoolean("canSeeOthers", true);

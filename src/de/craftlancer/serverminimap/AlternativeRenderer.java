@@ -83,7 +83,7 @@ public class AlternativeRenderer extends MapRenderer implements Listener
                 catch (NullPointerException e)
                 {
                     canvas.setPixel(i, j, (byte) 0);
-                    if (queue.size() < 500)
+                    if (queue.size() < 200)
                         addToQueue(x, z, true);
                 }
             }
@@ -124,9 +124,9 @@ public class AlternativeRenderer extends MapRenderer implements Listener
         return 0;
     }
     
-    public void addToQueue(int x, int y, boolean chuck)
-    {
-        Coords c = new Coords(x, y, chuck);
+    public void addToQueue(int x, int y, boolean chunk)
+    {                
+        Coords c = new Coords(x, y, chunk);
         if (!queue.contains(c))
             queue.offer(c);
     }

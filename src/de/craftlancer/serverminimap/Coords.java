@@ -45,7 +45,7 @@ public class Coords
         return true;
     }
     
-    public boolean isChuck()
+    public boolean isChunk()
     {
         return chunk;
     }

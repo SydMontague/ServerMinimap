@@ -14,19 +14,19 @@ public class RenderTask extends BukkitRunnable
     @Override
     public void run()
     {
-        int chucks = 0;
+        int chunks = 0;
         int blocks = 0;
         
-        while (chucks < renderer.cpr)
+        while (chunks < renderer.cpr)
         {
             Coords c = renderer.queue.poll();
             if (c == null)
                 break;
             
-            if (c.isChuck())
+            if (c.isChunk())
             {
                 renderer.loadData(c.x, c.z);
-                chucks++;
+                chunks++;
             }
             else
             {
@@ -35,7 +35,7 @@ public class RenderTask extends BukkitRunnable
                 if(blocks >= 16 * 16 * renderer.scale * renderer.scale)
                 {
                     blocks = 0;
-                    chucks++;
+                    chunks++;
                 }
             }
             
