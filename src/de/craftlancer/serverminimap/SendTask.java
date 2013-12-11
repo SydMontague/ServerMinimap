@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class SendTask extends BukkitRunnable
 {
+    @SuppressWarnings("deprecation")
     @Override
     public void run()
     {

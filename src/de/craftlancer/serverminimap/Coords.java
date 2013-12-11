@@ -2,9 +2,9 @@ package de.craftlancer.serverminimap;
 
 public class Coords
 {
-    int x;
-    int z;
-    boolean chunk;
+    private int x;
+    private int z;
+    private boolean chunk;
     
     public Coords(int x, int z, boolean chunk)
     {
@@ -48,5 +48,15 @@ public class Coords
     public boolean isChunk()
     {
         return chunk;
+    }
+    
+    public int getX()
+    {
+        return x;
+    }
+    
+    public int getZ()
+    {
+        return z;
     }
 }

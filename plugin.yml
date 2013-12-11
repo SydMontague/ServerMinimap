@@ -1,8 +1,8 @@
 name: ServerMinimap
 main: de.craftlancer.serverminimap.ServerMinimap
-version: 0.4
+version: 0.5
 author: SydMontague
-description: POC
+description: A serverside Minimap via maps.
 permissions:
     minimap.fastupdate:
         description: Updates the minimap of the player much faster

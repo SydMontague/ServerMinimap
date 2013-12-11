@@ -1,13 +1,19 @@
 package de.craftlancer.serverminimap;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import org.bukkit.Material;
+import java.io.IOException;
+
+import net.minecraft.server.v1_7_R1.MaterialMapColor;
+
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.craftbukkit.v1_7_R1.util.CraftMagicNumbers;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import de.craftlancer.serverminimap.metrics.Metrics;
+import de.craftlancer.serverminimap.metrics.Metrics.Graph;
 
 /**
  * The plugin is based on a request/idea by toxictroop and by the team at:
@@ -20,18 +26,66 @@ public class ServerMinimap extends JavaPlugin
 {
     public static short MAPID = 0;
     private FileConfiguration config;
-    private Map<Integer, Byte> colorMap = new HashMap<Integer, Byte>();
     private int SCALE = 0;
     private int CPR = 8;
-    public int runPerTicks = 1;
-    public int fastTicks = 20;
-    public boolean canSeeOthers;
+    private int runPerTicks = 1;
+    private int fastTicks = 20;
+    private boolean canSeeOthers;
     
     @Override
     public void onEnable()
     {
         loadConfig();
         loadMap();
+        
+        try
+        {
+            Metrics metrics = new Metrics(this);
+            
+            Graph scaleGraph = metrics.createGraph("Scale");
+            scaleGraph.addPlotter(new Metrics.Plotter(String.valueOf(SCALE))
+            {
+                
+                @Override
+                public int getValue()
+                {
+                    return 1;
+                }
+            });
+            
+            Graph cprGraph = metrics.createGraph("Chunks per Run");
+            cprGraph.addPlotter(new Metrics.Plotter(String.valueOf(CPR))
+            {
+                @Override
+                public int getValue()
+                {
+                    return 1;
+                }
+            });
+            
+            Graph rptGraph = metrics.createGraph("Render per Ticks");
+            rptGraph.addPlotter(new Metrics.Plotter(String.valueOf(runPerTicks))
+            {
+                @Override
+                public int getValue()
+                {
+                    return 1;
+                }
+            });
+            
+            metrics.start();
+        }
+        catch (IOException e)
+        {
+        }
+    }
+    
+    @Override
+    public void onDisable()
+    {
+        getServer().getScheduler().cancelTasks(this);
+        config.set("mapID", MAPID);
+        saveConfig();
     }
     
     private void loadConfig()
@@ -46,60 +100,47 @@ public class ServerMinimap extends JavaPlugin
         runPerTicks = config.getInt("runPerTicks", 1);
         fastTicks = config.getInt("fastTicks", 20);
         canSeeOthers = config.getBoolean("canSeeOthers", true);
-        
-        for (String key : config.getConfigurationSection("colors").getKeys(false))
-            if (isMaterial(key))
-                if (isValidColor(config.getInt("colors." + key, 0)))
-                    colorMap.put(getMaterial(key).getId(), (byte) config.getInt("colors." + key, 0));
+        MAPID = (short) config.getInt("mapID", 0);
     }
     
-    private static boolean isValidColor(int color)
+    public int getRunPerTicks()
     {
-        return (color < 0 || color > 56) ? false : true;
+        return runPerTicks;
     }
     
-    private static boolean isMaterial(String s)
+    public int getFastTicks()
     {
-        return getMaterial(s) != null;
+        return fastTicks;
     }
     
-    private static Material getMaterial(String s)
+    public boolean canSeeOthers()
     {
-        try
-        {
-            return Material.getMaterial(Integer.parseInt(s));
-        }
-        catch (NumberFormatException e)
-        {
-            return Material.getMaterial(s);
-        }
+        return canSeeOthers;
     }
     
+    @SuppressWarnings("deprecation")
     private void loadMap()
     {
-        MapView map = getServer().getMap((short) 0);
+        MapView map = getServer().getMap(MAPID);
         if (map == null)
             map = getServer().createMap(getServer().getWorlds().get(0));
         
-        if(map.getId() != 0)
-            getLogger().severe("Created Map has not Id 0 while map 0 is non existent! PLEASE REPORT TO ME!!!");
+        MAPID = map.getId();
         
-        if (!(map.getRenderers().get(0) instanceof AlternativeRenderer))
+        if (!(map.getRenderers().get(0) instanceof MinimapRenderer))
         {
             for (MapRenderer r : map.getRenderers())
                 map.removeRenderer(r);
             
-            map.addRenderer(new AlternativeRenderer(SCALE, CPR, getServer().getWorlds().get(0), this));
+            map.addRenderer(new MinimapRenderer(SCALE, CPR, getServer().getWorlds().get(0), this));
         }
+        
+        getLogger().info("Created Minimap with ID " + MAPID + ". Use /give <name> MAP 1 " + MAPID + " to get the map as item.");
     }
     
-    public byte getColor(Material mat)
+    @SuppressWarnings("deprecation")
+    public MaterialMapColor getColor(Block block)
     {
-        return getColor(mat.getId());
-    }
-    
-    public byte getColor(int id)
-    {
-        return colorMap.containsKey(id) ? colorMap.get(id) : 0;
+        return CraftMagicNumbers.getBlock(block).f(block.getData());
     }
 }
