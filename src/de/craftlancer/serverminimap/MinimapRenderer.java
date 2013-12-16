@@ -7,8 +7,6 @@ import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.TreeMap;
 
-import net.minecraft.server.v1_7_R1.MaterialMapColor;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -33,6 +31,7 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 import de.craftlancer.serverminimap.event.MinimapPlayerCursorEvent;
+import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
 
 public class MinimapRenderer extends MapRenderer implements Listener
 {
@@ -101,7 +100,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
                 
                 if (cacheMap.get(x) != null && cacheMap.get(x).get(z) != null)
                 {
-                    MaterialMapColor color = cacheMap.get(x).get(z).get(Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16);
+                    MaterialMapColorInterface color = cacheMap.get(x).get(z).get(Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16);
                     short avgY = cacheMap.get(x).get(z).getY(Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16);
                     short prevY = getPrevY(x, z, Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16);
                     
@@ -112,7 +111,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
                         b0 = 2;
                     if (d2 < -0.6D)
                         b0 = 0;
-                    canvas.setPixel(i, j, (byte) (color.M * 4 + b0));
+                    canvas.setPixel(i, j, (byte) (color.getM() * 4 + b0));
                     
                 }
                 else
@@ -164,7 +163,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
             cacheMap.put(x, new TreeMap<Integer, MapChunk>());
         
         if (!cacheMap.get(x).containsKey(z))
-            cacheMap.get(x).put(z, new MapChunk());
+            cacheMap.get(x).put(z, new MapChunk(plugin));
         
         MapChunk map = cacheMap.get(x).get(z);
         
@@ -221,9 +220,9 @@ public class MinimapRenderer extends MapRenderer implements Listener
     
     public RenderResult renderBlock(int baseX, int baseZ, short prevY)
     {
-        Map<MaterialMapColor, Integer> colors = new HashMap<MaterialMapColor, Integer>();
+        Map<MaterialMapColorInterface, Integer> colors = new HashMap<MaterialMapColorInterface, Integer>();
         short avgY = 0;
-        MaterialMapColor mainColor = null;
+        MaterialMapColorInterface mainColor = null;
         
         for (int k = 0; k < scale; k++)
             for (int l = 0; l < scale; l++)
@@ -233,14 +232,14 @@ public class MinimapRenderer extends MapRenderer implements Listener
                 if (!b.getChunk().isLoaded())
                     b.getChunk().load();
                 
-                while (b.getY() > 0 && plugin.getColor(b) == MaterialMapColor.b)
+                while (b.getY() > 0 && plugin.getNMSHandler().getBlockColor(b) == plugin.getNMSHandler().getColorNeutral())
                     b = world.getBlockAt(b.getX(), b.getY() - 1, b.getZ());
                 
                 avgY += b.getY();
                 
                 if (mainColor == null)
                 {
-                    MaterialMapColor color = plugin.getColor(b);
+                    MaterialMapColorInterface color = plugin.getNMSHandler().getBlockColor(b);
                     int value = colors.containsKey(color) ? colors.get(color) + 1 : 1;
                     colors.put(color, value);
                     
@@ -254,7 +253,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
         if (mainColor == null)
         {
             int max = 0;
-            for (Entry<MaterialMapColor, Integer> c : colors.entrySet())
+            for (Entry<MaterialMapColorInterface, Integer> c : colors.entrySet())
                 if (c.getValue() > max)
                 {
                     max = c.getValue();

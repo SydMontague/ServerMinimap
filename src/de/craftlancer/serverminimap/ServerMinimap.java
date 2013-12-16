@@ -3,17 +3,14 @@ package de.craftlancer.serverminimap;
 import java.io.File;
 import java.io.IOException;
 
-import net.minecraft.server.v1_7_R1.MaterialMapColor;
-
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_7_R1.util.CraftMagicNumbers;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.craftlancer.serverminimap.metrics.Metrics;
 import de.craftlancer.serverminimap.metrics.Metrics.Graph;
+import de.craftlancer.serverminimap.nmscompat.INMSHandler;
 
 /**
  * The plugin is based on a request/idea by toxictroop and by the team at:
@@ -32,9 +29,13 @@ public class ServerMinimap extends JavaPlugin
     private int fastTicks = 20;
     private boolean canSeeOthers;
     
+    private INMSHandler nms;
+    
     @Override
     public void onEnable()
     {
+        setupNMSHandler();
+        
         loadConfig();
         loadMap();
         
@@ -78,6 +79,29 @@ public class ServerMinimap extends JavaPlugin
         catch (IOException e)
         {
         }
+    }
+    
+    private void setupNMSHandler()
+    {
+        String cbPackage = getServer().getClass().getPackage().getName();
+        String version = cbPackage.substring(cbPackage.lastIndexOf('.') + 1);
+        
+        try
+        {
+            Class<?> c = Class.forName("de.craftlancer.serverminimap.nmscompat." + version + ".NMSHandler");
+            if (INMSHandler.class.isAssignableFrom(c))
+                this.nms = (INMSHandler) c.getConstructor().newInstance();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            getLogger().severe("Error while loading NMS Compat Layer - please notify author!");
+        }
+    }
+    
+    public INMSHandler getNMSHandler()
+    {
+        return nms;
     }
     
     @Override
@@ -138,9 +162,4 @@ public class ServerMinimap extends JavaPlugin
         getLogger().info("Created Minimap with ID " + MAPID + ". Use /give <name> MAP 1 " + MAPID + " to get the map as item.");
     }
     
-    @SuppressWarnings("deprecation")
-    public MaterialMapColor getColor(Block block)
-    {
-        return CraftMagicNumbers.getBlock(block).f(block.getData());
-    }
 }

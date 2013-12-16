@@ -1,18 +1,18 @@
 package de.craftlancer.serverminimap;
 
-import net.minecraft.server.v1_7_R1.MaterialMapColor;
+import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
 
 public class MapChunk
 {
-    private MaterialMapColor cache[][] = new MaterialMapColor[16][16];
+    private MaterialMapColorInterface cache[][] = new MaterialMapColorInterface[16][16];
     private short avgY[][] = new short[16][16];
     
-    public MapChunk()
+    public MapChunk(ServerMinimap plugin)
     {
         for (int i = 0; i < 16; i++)
             for (int j = 0; j < 16; j++)
             {
-                cache[i][j] = MaterialMapColor.b;
+                cache[i][j] = plugin.getNMSHandler().getColorNeutral();
                 avgY[i][j] = 64;
             }
     }
@@ -23,7 +23,7 @@ public class MapChunk
         avgY[i][j] = value.getAverageY();
     }
     
-    public MaterialMapColor get(int i, int j)
+    public MaterialMapColorInterface get(int i, int j)
     {
         return cache[i][j];
     }

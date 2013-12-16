@@ -1,6 +1,6 @@
 name: ServerMinimap
 main: de.craftlancer.serverminimap.ServerMinimap
-version: 0.5
+version: 0.5.1
 author: SydMontague
 description: A serverside Minimap via maps.
 permissions:

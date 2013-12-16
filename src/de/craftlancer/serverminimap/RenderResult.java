@@ -1,19 +1,19 @@
 package de.craftlancer.serverminimap;
 
-import net.minecraft.server.v1_7_R1.MaterialMapColor;
+import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
 
 public class RenderResult
 {
-    private MaterialMapColor color;
+    private MaterialMapColorInterface color;
     private short avgY;
     
-    public RenderResult(MaterialMapColor color, short avgY)
+    public RenderResult(MaterialMapColorInterface color, short avgY)
     {
         this.color = color;
         this.avgY = avgY;
     }
     
-    public MaterialMapColor getColor()
+    public MaterialMapColorInterface getColor()
     {
         return color;
     }
