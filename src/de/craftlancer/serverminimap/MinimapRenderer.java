@@ -31,6 +31,7 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 import de.craftlancer.serverminimap.event.MinimapPlayerCursorEvent;
+import de.craftlancer.serverminimap.event.MinimapExtraCursorEvent;
 import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
 
 public class MinimapRenderer extends MapRenderer implements Listener
@@ -98,7 +99,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
                 if (locZ + j < 0 && (locZ + j) % 16 != 0)
                     z--;
                 
-                if (cacheMap.get(x) != null && cacheMap.get(x).get(z) != null)
+                if (cacheMap.containsKey(x) && cacheMap.get(x).containsKey(z))
                 {
                     MaterialMapColorInterface color = cacheMap.get(x).get(z).get(Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16);
                     short avgY = cacheMap.get(x).get(z).getY(Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16);
@@ -148,6 +149,20 @@ public class MinimapRenderer extends MapRenderer implements Listener
             if (e.isCursorShown())
                 cursors.addCursor(x, z, direction, e.getType().getValue());
         }
+        
+        MinimapExtraCursorEvent e = new MinimapExtraCursorEvent(player);
+        plugin.getServer().getPluginManager().callEvent(e);
+        
+        for (ExtraCursor c : e.getCursors())
+        {
+            int x = ((c.getX() - player.getLocation().getBlockX()) / scale) * 2;
+            int z = ((c.getZ() - player.getLocation().getBlockZ()) / scale) * 2;
+            
+            if (Math.abs(x) > 128 || Math.abs(z) > 128)
+                continue;
+            
+            cursors.addCursor(x, z, c.getDirection(), c.getType().getValue(), c.isVisible());
+        }
     }
     
     public void addToQueue(int x, int y, boolean chunk)
@@ -172,7 +187,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
         
         for (int i = 0; i < 16; i++)
             for (int j = 0; j < 16; j++)
-                map.set(i, j, renderBlock(initX + i * scale, initZ + j * scale, getPrevY(x, z, i, j)));
+                map.set(i, j, renderBlock(initX + i * scale, initZ + j * scale));
     }
     
     private short getPrevY(int x, int z, int i, int j)
@@ -215,10 +230,10 @@ public class MinimapRenderer extends MapRenderer implements Listener
             return;// cacheMap.get(x).put(z, new MapChunk());
             
         MapChunk map = cacheMap.get(x).get(z);
-        map.set(sx, sz, renderBlock((x * 16 + sx) * scale, (z * 16 + sz) * scale, getPrevY(x, z, sx, sz)));
+        map.set(sx, sz, renderBlock((x * 16 + sx) * scale, (z * 16 + sz) * scale));
     }
     
-    public RenderResult renderBlock(int baseX, int baseZ, short prevY)
+    public RenderResult renderBlock(int baseX, int baseZ)
     {
         Map<MaterialMapColorInterface, Integer> colors = new HashMap<MaterialMapColorInterface, Integer>();
         short avgY = 0;
