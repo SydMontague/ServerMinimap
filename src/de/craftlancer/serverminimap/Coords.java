@@ -5,12 +5,14 @@ public class Coords
     private int x;
     private int z;
     private boolean chunk;
+    private String world;
     
-    public Coords(int x, int z, boolean chunk)
+    public Coords(int x, int z, boolean chunk, String world)
     {
         this.x = x;
         this.z = z;
         this.chunk = chunk;
+        this.world = world;
     }
     
     @Override
@@ -58,5 +60,10 @@ public class Coords
     public int getZ()
     {
         return z;
+    }
+    
+    public String getWorld()
+    {
+        return world;
     }
 }

@@ -13,6 +13,7 @@ public class ExtraCursor
     private boolean visible;
     private MapCursor.Type type;
     private byte direction;
+    private String world;
     
     /**
      * Construct a new ExtraCursor object.
@@ -23,13 +24,14 @@ public class ExtraCursor
      * @param type - the type/shape of the cursor
      * @param direction - the direction the cursor is pointing at
      */
-    public ExtraCursor(int x, int z, boolean visible, MapCursor.Type type, byte direction)
+    public ExtraCursor(int x, int z, boolean visible, MapCursor.Type type, byte direction, String world)
     {
         setX(x);
         setZ(z);
         setVisible(visible);
         setType(type);
         setDirection(direction);
+        setWorld(world);
     }
     
     /**
@@ -142,6 +144,25 @@ public class ExtraCursor
     public void setDirection(byte direction)
     {
         this.direction = (byte) (direction % 16);
+    }
+
+    /**
+     * Get the world the cursor is shown in.
+     * 
+     * @return the name of the world (World#getName())
+     */
+    public String getWorld()
+    {
+        return world;
+    }
+
+    /**
+     * Set the world the cursor is shown in.
+     * @param world the name of the world (World#getName())
+     */
+    public void setWorld(String world)
+    {
+        this.world = world;
     }
     
 }

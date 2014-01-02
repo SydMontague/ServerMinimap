@@ -36,7 +36,7 @@ import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
 
 public class MinimapRenderer extends MapRenderer implements Listener
 {
-    private Map<Integer, Map<Integer, MapChunk>> cacheMap = new TreeMap<Integer, Map<Integer, MapChunk>>();
+    private Map<String, Map<Integer, Map<Integer, MapChunk>>> worldCacheMap = new TreeMap<String, Map<Integer, Map<Integer, MapChunk>>>();
     protected Queue<Coords> queue = new LinkedList<Coords>();
     private RenderTask cacheTask = new RenderTask(this);
     private SendTask sendTask = new SendTask();
@@ -45,15 +45,13 @@ public class MinimapRenderer extends MapRenderer implements Listener
     private int cpr = 0;
     private int colorlimit;
     private ServerMinimap plugin;
-    private World world;
     
-    public MinimapRenderer(int scale, int cpr, World world, ServerMinimap plugin)
+    public MinimapRenderer(int scale, int cpr, ServerMinimap plugin)
     {
         super(true);
         
         this.plugin = plugin;
         this.cpr = cpr;
-        this.world = world;
         
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         
@@ -83,8 +81,10 @@ public class MinimapRenderer extends MapRenderer implements Listener
     @Override
     public void render(MapView map, MapCanvas canvas, Player player)
     {
-        if (!player.getWorld().equals(world) || !(player.getItemInHand().getType() == Material.MAP && player.getItemInHand().getDurability() == ServerMinimap.MAPID))
+        if (!(player.getItemInHand().getType() == Material.MAP && player.getItemInHand().getDurability() == ServerMinimap.MAPID))
             return;
+        
+        Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(player.getWorld().getName());
         
         int locX = player.getLocation().getBlockX() / scale - 64;
         int locZ = player.getLocation().getBlockZ() / scale - 64;
@@ -103,7 +103,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
                 {
                     MaterialMapColorInterface color = cacheMap.get(x).get(z).get(Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16);
                     short avgY = cacheMap.get(x).get(z).getY(Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16);
-                    short prevY = getPrevY(x, z, Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16);
+                    short prevY = getPrevY(x, z, Math.abs((locX + i + 16 * Math.abs(x))) % 16, Math.abs((locZ + j + 16 * Math.abs(z))) % 16, player.getWorld().getName());
                     
                     double d2 = (avgY - prevY) * 4.0D / (scale + 4) + ((i + j & 1) - 0.5D) * 0.4D;
                     byte b0 = 1;
@@ -119,7 +119,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
                 {
                     canvas.setPixel(i, j, (byte) 0);
                     if (queue.size() < 200)
-                        addToQueue(x, z, true);
+                        addToQueue(x, z, true, player.getWorld().getName());
                 }
             }
         
@@ -129,6 +129,9 @@ public class MinimapRenderer extends MapRenderer implements Listener
         
         for (Player p : plugin.getServer().getOnlinePlayers())
         {
+            if (!p.getWorld().equals(player.getWorld()))
+                continue;
+            
             float yaw = p.getLocation().getYaw();
             if (yaw < 0)
                 yaw += 360;
@@ -155,6 +158,9 @@ public class MinimapRenderer extends MapRenderer implements Listener
         
         for (ExtraCursor c : e.getCursors())
         {
+            if (!c.getWorld().equalsIgnoreCase(player.getWorld().getName()))
+                continue;
+            
             int x = ((c.getX() - player.getLocation().getBlockX()) / scale) * 2;
             int z = ((c.getZ() - player.getLocation().getBlockZ()) / scale) * 2;
             
@@ -165,15 +171,17 @@ public class MinimapRenderer extends MapRenderer implements Listener
         }
     }
     
-    public void addToQueue(int x, int y, boolean chunk)
+    public void addToQueue(int x, int y, boolean chunk, String world)
     {
-        Coords c = new Coords(x, y, chunk);
+        Coords c = new Coords(x, y, chunk, world);
         if (!queue.contains(c))
             queue.offer(c);
     }
     
-    public void loadData(int x, int z)
+    public void loadData(int x, int z, String world)
     {
+        Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(world);
+        
         if (!cacheMap.containsKey(x))
             cacheMap.put(x, new TreeMap<Integer, MapChunk>());
         
@@ -187,11 +195,14 @@ public class MinimapRenderer extends MapRenderer implements Listener
         
         for (int i = 0; i < 16; i++)
             for (int j = 0; j < 16; j++)
-                map.set(i, j, renderBlock(initX + i * scale, initZ + j * scale));
+                map.set(i, j, renderBlock(initX + i * scale, initZ + j * scale, world));
     }
     
-    private short getPrevY(int x, int z, int i, int j)
+    private short getPrevY(int x, int z, int i, int j, String world)
     {
+        
+        Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(world);
+        
         j--;
         
         if (j < 0)
@@ -208,8 +219,10 @@ public class MinimapRenderer extends MapRenderer implements Listener
         return avgY;
     }
     
-    public void loadBlock(int initX, int initZ)
+    public void loadBlock(int initX, int initZ, String world)
     {
+        Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(world);
+        
         int locX = initX / scale;
         int locZ = initZ / scale;
         
@@ -230,14 +243,15 @@ public class MinimapRenderer extends MapRenderer implements Listener
             return;// cacheMap.get(x).put(z, new MapChunk());
             
         MapChunk map = cacheMap.get(x).get(z);
-        map.set(sx, sz, renderBlock((x * 16 + sx) * scale, (z * 16 + sz) * scale));
+        map.set(sx, sz, renderBlock((x * 16 + sx) * scale, (z * 16 + sz) * scale, world));
     }
     
-    public RenderResult renderBlock(int baseX, int baseZ)
+    public RenderResult renderBlock(int baseX, int baseZ, String strworld)
     {
         Map<MaterialMapColorInterface, Integer> colors = new HashMap<MaterialMapColorInterface, Integer>();
         short avgY = 0;
         MaterialMapColorInterface mainColor = null;
+        World world = plugin.getServer().getWorld(strworld);
         
         for (int k = 0; k < scale; k++)
             for (int l = 0; l < scale; l++)
@@ -292,7 +306,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
     {
         Location loc = e.getLocation();
         if (loc.getBlockY() >= loc.getWorld().getHighestBlockYAt(loc) - 1)
-            addToQueue(loc.getBlockX(), loc.getBlockZ(), false);
+            addToQueue(loc.getBlockX(), loc.getBlockZ(), false, e.getWorld().getName());
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

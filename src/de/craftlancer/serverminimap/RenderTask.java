@@ -25,12 +25,12 @@ public class RenderTask extends BukkitRunnable
             
             if (c.isChunk())
             {
-                renderer.loadData(c.getX(), c.getZ());
+                renderer.loadData(c.getX(), c.getZ(), c.getWorld());
                 chunks++;
             }
             else
             {
-                renderer.loadBlock(c.getX(), c.getZ());
+                renderer.loadBlock(c.getX(), c.getZ(), c.getWorld());
                 blocks++;
                 if (blocks >= 16 * 16 * renderer.getScale() * renderer.getScale())
                 {

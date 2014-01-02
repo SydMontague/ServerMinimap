@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.craftlancer.serverminimap.metrics.Metrics;
 import de.craftlancer.serverminimap.metrics.Metrics.Graph;
 import de.craftlancer.serverminimap.nmscompat.INMSHandler;
+import de.craftlancer.serverminimap.waypoint.WaypointHandler;
 
 /**
  * The plugin is based on a request/idea by toxictroop and by the team at:
@@ -29,6 +30,8 @@ public class ServerMinimap extends JavaPlugin
     private int fastTicks = 20;
     private boolean canSeeOthers;
     
+    private WaypointHandler waypoint = new WaypointHandler(this);
+    
     private INMSHandler nms;
     
     @Override
@@ -38,6 +41,9 @@ public class ServerMinimap extends JavaPlugin
         
         loadConfig();
         loadMap();
+        
+        waypoint.load();
+        getServer().getPluginManager().registerEvents(waypoint, this);
         
         try
         {
@@ -156,10 +162,15 @@ public class ServerMinimap extends JavaPlugin
             for (MapRenderer r : map.getRenderers())
                 map.removeRenderer(r);
             
-            map.addRenderer(new MinimapRenderer(SCALE, CPR, getServer().getWorlds().get(0), this));
+            map.addRenderer(new MinimapRenderer(SCALE, CPR, this));
         }
         
         getLogger().info("Created Minimap with ID " + MAPID + ". Use /give <name> MAP 1 " + MAPID + " to get the map as item.");
+    }
+
+    public WaypointHandler getWaypointHandler()
+    {
+        return waypoint;
     }
     
 }
