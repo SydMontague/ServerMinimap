@@ -34,7 +34,10 @@ public class WaypointRemoveCommand extends WaypointSubCommand
                 return;
             }
             
-            plugin.getWaypointHandler().removeWaypoint(sender.getName(), index);
+            if(!plugin.getWaypointHandler().removeWaypoint(sender.getName(), index))
+                sender.sendMessage("Failed to remove Waypoint. (Wrong index?)");
+            else
+                sender.sendMessage("Waypoint removed!");
         }
     }
     

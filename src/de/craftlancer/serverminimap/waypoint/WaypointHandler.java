@@ -1,10 +1,12 @@
 package de.craftlancer.serverminimap.waypoint;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,6 +33,9 @@ public class WaypointHandler implements Listener
     
     public boolean addWaypoint(String player, int x, int z, String world)
     {
+        if(player == null || world == null)
+            return false;
+        
         if (!waypoints.containsKey(player))
             waypoints.put(player, new ArrayList<ExtraCursor>());
         
@@ -44,11 +49,17 @@ public class WaypointHandler implements Listener
     
     public boolean addWaypoint(Player p)
     {
+        if(p == null)
+            return false;
+        
         return addWaypoint(p.getName(), p.getLocation());
     }
     
     public boolean addWaypoint(String player, Location loc)
     {
+        if(loc == null)
+            return false;
+        
         return addWaypoint(player, loc.getBlockX(), loc.getBlockZ(), loc.getWorld().getName());
     }
     
@@ -90,6 +101,45 @@ public class WaypointHandler implements Listener
             loadFile();
     }
     
+    public void save()
+    {
+        if (plugin.getConfig().getBoolean("useMySQL", false))
+            saveMySQL();
+        else
+            saveFile();
+    }
+    
+    private void saveMySQL()
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    private void saveFile()
+    {
+        File file = new File(plugin.getDataFolder(), "waypoints.yml");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        
+        for (Entry<String, List<ExtraCursor>> e : waypoints.entrySet())
+        {
+            List<String> str = new ArrayList<String>((int) (waypoints.size() * 1.25));
+            for (ExtraCursor c : e.getValue())
+                str.add(c.toString());
+            
+            config.set(e.getKey(), str);
+        }
+        
+        try
+        {
+            config.save(file);
+        }
+        catch (IOException e1)
+        {
+            plugin.getLogger().severe("Failed to save waypoints.yml!");
+            e1.printStackTrace();
+        }
+    }
+    
     private void loadFile()
     {
         File file = new File(plugin.getDataFolder(), "waypoints.yml");
@@ -109,11 +159,17 @@ public class WaypointHandler implements Listener
     
     public boolean removeWaypoint(String name, int index)
     {
+        if (index < 0 || getWaypoints(name) == null)
+            return false;
+        
         return getWaypoints(name).remove(index) != null;
     }
     
     public ExtraCursor getWaypoint(String name, int index)
     {
+        if (index < 0 || getWaypoints(name) == null)
+            return null;
+        
         return getWaypoints(name).get(index);
     }
 }

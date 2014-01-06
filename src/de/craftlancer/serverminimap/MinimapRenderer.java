@@ -112,8 +112,8 @@ public class MinimapRenderer extends MapRenderer implements Listener
                         b0 = 2;
                     if (d2 < -0.6D)
                         b0 = 0;
-                    canvas.setPixel(i, j, (byte) (color.getM() * 4 + b0));
                     
+                    canvas.setPixel(i, j, (byte) (color.getM() * 4 + b0));
                 }
                 else
                 {
@@ -214,9 +214,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
         if (cacheMap.containsKey(x) && cacheMap.get(x).containsKey(z))
             return cacheMap.get(x).get(z).getY(i, j);
         
-        short avgY = 0;
-        
-        return avgY;
+        return 0;
     }
     
     public void loadBlock(int initX, int initZ, String world)

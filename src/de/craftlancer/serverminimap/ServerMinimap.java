@@ -113,9 +113,10 @@ public class ServerMinimap extends JavaPlugin
     @Override
     public void onDisable()
     {
-        getServer().getScheduler().cancelTasks(this);
+        waypoint.save();
         config.set("mapID", MAPID);
         saveConfig();
+        getServer().getScheduler().cancelTasks(this);
     }
     
     private void loadConfig()
@@ -167,7 +168,7 @@ public class ServerMinimap extends JavaPlugin
         
         getLogger().info("Created Minimap with ID " + MAPID + ". Use /give <name> MAP 1 " + MAPID + " to get the map as item.");
     }
-
+    
     public WaypointHandler getWaypointHandler()
     {
         return waypoint;

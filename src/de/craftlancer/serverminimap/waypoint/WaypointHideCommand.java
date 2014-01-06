@@ -36,14 +36,24 @@ public class WaypointHideCommand extends WaypointSubCommand
             }
             
             ExtraCursor w = plugin.getWaypointHandler().getWaypoint(sender.getName(), index);
-            w.setVisible(!w.isVisible());
+            
+            boolean hide;
+            
+            if (args[2].equalsIgnoreCase("true"))
+                hide = false;
+            else if (args[2].equalsIgnoreCase("false"))
+                hide = true;
+            else
+                hide = !w.isVisible();
+            
+            w.setVisible(hide);
         }
     }
     
     @Override
     public void help(CommandSender sender)
     {
-        sender.sendMessage("/waypoint hide <index> - hide/unhide a waypoint with an index");
+        sender.sendMessage("/waypoint hide <index> [true/false] - hide/unhide a waypoint with an index");
     }
     
 }

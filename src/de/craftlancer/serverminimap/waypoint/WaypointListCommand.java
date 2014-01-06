@@ -17,21 +17,20 @@ public class WaypointListCommand extends WaypointSubCommand
     @Override
     protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if(!checkSender(sender))
+        if (!checkSender(sender))
             sender.sendMessage("You don't have permission for this command!");
         else
         {
             int i = 1;
-            for(ExtraCursor w : plugin.getWaypointHandler().getWaypoints(sender.getName()))
-                sender.sendMessage(i + " X: " + w.getX() + " Z: " + w.getZ() + " Visible: " + w.isVisible());
-        }        
+            for (ExtraCursor w : plugin.getWaypointHandler().getWaypoints(sender.getName()))
+                sender.sendMessage(i++ + " X: " + w.getX() + " Z: " + w.getZ() + " Visible: " + w.isVisible());
+        }
     }
     
     @Override
     public void help(CommandSender sender)
     {
-        // TODO Auto-generated method stub
-        
+        sender.sendMessage("List all your waypoints with their index.");
     }
     
 }

@@ -165,4 +165,9 @@ public class ExtraCursor
         this.world = world;
     }
     
+    @Override
+    public String toString()
+    {
+        return x + " " + z + " " + world;
+    }
 }
