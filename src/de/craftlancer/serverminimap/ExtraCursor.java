@@ -14,6 +14,7 @@ public class ExtraCursor
     private MapCursor.Type type;
     private byte direction;
     private String world;
+    private boolean outside;
     
     /**
      * Construct a new ExtraCursor object.
@@ -24,7 +25,7 @@ public class ExtraCursor
      * @param type - the type/shape of the cursor
      * @param direction - the direction the cursor is pointing at
      */
-    public ExtraCursor(int x, int z, boolean visible, MapCursor.Type type, byte direction, String world)
+    public ExtraCursor(int x, int z, boolean visible, MapCursor.Type type, byte direction, String world, boolean outside)
     {
         setX(x);
         setZ(z);
@@ -32,6 +33,7 @@ public class ExtraCursor
         setType(type);
         setDirection(direction);
         setWorld(world);
+        setShowOutside(outside);
     }
     
     /**
@@ -169,5 +171,15 @@ public class ExtraCursor
     public String toString()
     {
         return x + " " + z + " " + world;
+    }
+
+    public boolean isShownOutside()
+    {
+        return outside;
+    }
+    
+    public void setShowOutside(boolean bool)
+    {
+        this.outside = bool;
     }
 }

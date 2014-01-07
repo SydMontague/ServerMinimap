@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.craftlancer.serverminimap.metrics.Metrics;
 import de.craftlancer.serverminimap.metrics.Metrics.Graph;
 import de.craftlancer.serverminimap.nmscompat.INMSHandler;
+import de.craftlancer.serverminimap.waypoint.WaypointCommandHandler;
 import de.craftlancer.serverminimap.waypoint.WaypointHandler;
 
 /**
@@ -29,6 +30,7 @@ public class ServerMinimap extends JavaPlugin
     private int runPerTicks = 1;
     private int fastTicks = 20;
     private boolean canSeeOthers;
+    private boolean distantWaypoints;
     
     private WaypointHandler waypoint = new WaypointHandler(this);
     
@@ -44,6 +46,8 @@ public class ServerMinimap extends JavaPlugin
         
         waypoint.load();
         getServer().getPluginManager().registerEvents(waypoint, this);
+        
+        getCommand("waypoint").setExecutor(new WaypointCommandHandler(this));
         
         try
         {
@@ -132,6 +136,7 @@ public class ServerMinimap extends JavaPlugin
         fastTicks = config.getInt("fastTicks", 20);
         canSeeOthers = config.getBoolean("canSeeOthers", true);
         MAPID = (short) config.getInt("mapID", 0);
+        distantWaypoints = config.getBoolean("showDistantWaypoints", false);
     }
     
     public int getRunPerTicks()
@@ -147,6 +152,11 @@ public class ServerMinimap extends JavaPlugin
     public boolean canSeeOthers()
     {
         return canSeeOthers;
+    }
+    
+    public int getScale()
+    {
+        return SCALE;
     }
     
     @SuppressWarnings("deprecation")
@@ -172,6 +182,11 @@ public class ServerMinimap extends JavaPlugin
     public WaypointHandler getWaypointHandler()
     {
         return waypoint;
+    }
+
+    public boolean showDistantWaypoints()
+    {
+        return distantWaypoints;
     }
     
 }

@@ -19,7 +19,7 @@ public class WaypointHideCommand extends WaypointSubCommand
     {
         if (!checkSender(sender))
             sender.sendMessage("You don't have permission for this command!");
-        else if (args.length > 2)
+        else if (args.length < 2)
             sender.sendMessage("You need to specify a index!");
         else
         {
@@ -39,9 +39,9 @@ public class WaypointHideCommand extends WaypointSubCommand
             
             boolean hide;
             
-            if (args[2].equalsIgnoreCase("true"))
+            if (args.length >= 3 && args[2].equalsIgnoreCase("true"))
                 hide = false;
-            else if (args[2].equalsIgnoreCase("false"))
+            else if (args.length >= 3 && args[2].equalsIgnoreCase("false"))
                 hide = true;
             else
                 hide = !w.isVisible();

@@ -7,3 +7,7 @@ permissions:
     minimap.fastupdate:
         description: Updates the minimap of the player much faster
         default: false
+commands:
+    waypoint:
+        usage: /waypoint
+        

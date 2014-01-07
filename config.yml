@@ -3,3 +3,4 @@ chunksPerRun: 4
 runPerTicks: 5
 fastTicks: 20
 canSeeOthers: true
+showDistantWaypoints: false

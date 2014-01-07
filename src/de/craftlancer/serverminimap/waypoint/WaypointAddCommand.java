@@ -19,7 +19,7 @@ public class WaypointAddCommand extends WaypointSubCommand
     {
         if (!checkSender(sender))
             sender.sendMessage("You don't have permission for this command!");
-        else if (args.length == 1 || args.length >= 3)
+        else if (args.length < 1 || args.length >= 3)
             help(sender);
         else
         {

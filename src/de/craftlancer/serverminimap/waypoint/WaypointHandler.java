@@ -33,23 +33,26 @@ public class WaypointHandler implements Listener
     
     public boolean addWaypoint(String player, int x, int z, String world)
     {
-        if(player == null || world == null)
+        if (player == null || world == null)
             return false;
         
         if (!waypoints.containsKey(player))
             waypoints.put(player, new ArrayList<ExtraCursor>());
         
-        return waypoints.get(player).add(new ExtraCursor(x, z, true, MapCursor.Type.WHITE_CROSS, (byte) 0, world));
+        return waypoints.get(player).add(new ExtraCursor(x, z, true, MapCursor.Type.WHITE_CROSS, (byte) 0, world, plugin.showDistantWaypoints()));
     }
     
     public List<ExtraCursor> getWaypoints(String player)
     {
+        if (!waypoints.containsKey(player))
+            waypoints.put(player, new ArrayList<ExtraCursor>());
+        
         return waypoints.get(player);
     }
     
     public boolean addWaypoint(Player p)
     {
-        if(p == null)
+        if (p == null)
             return false;
         
         return addWaypoint(p.getName(), p.getLocation());
@@ -57,7 +60,7 @@ public class WaypointHandler implements Listener
     
     public boolean addWaypoint(String player, Location loc)
     {
-        if(loc == null)
+        if (loc == null)
             return false;
         
         return addWaypoint(player, loc.getBlockX(), loc.getBlockZ(), loc.getWorld().getName());
@@ -90,6 +93,8 @@ public class WaypointHandler implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onMinimapExtraCursor(MinimapExtraCursorEvent e)
     {
+        List<ExtraCursor> cursors = getWaypoints(e.getPlayer().getName());
+        
         e.getCursors().addAll(getWaypoints(e.getPlayer().getName()));
     }
     
@@ -159,7 +164,7 @@ public class WaypointHandler implements Listener
     
     public boolean removeWaypoint(String name, int index)
     {
-        if (index < 0 || getWaypoints(name) == null)
+        if (index < 0 || getWaypoints(name) == null || getWaypoints(name).size() == 0)
             return false;
         
         return getWaypoints(name).remove(index) != null;
@@ -167,7 +172,7 @@ public class WaypointHandler implements Listener
     
     public ExtraCursor getWaypoint(String name, int index)
     {
-        if (index < 0 || getWaypoints(name) == null)
+        if (index < 0 || getWaypoints(name) == null || getWaypoints(name).size() == 0)
             return null;
         
         return getWaypoints(name).get(index);

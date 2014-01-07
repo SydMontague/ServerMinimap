@@ -49,7 +49,6 @@ public abstract class WaypointSubCommand
     
     protected abstract void execute(CommandSender sender, Command cmd, String label, String[] args);
     
-    @SuppressWarnings("unused")
     protected List<String> onTabComplete(CommandSender sender, String[] args)
     {
         return null;

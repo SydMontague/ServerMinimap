@@ -55,7 +55,8 @@ public class MinimapRenderer extends MapRenderer implements Listener
         
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         
-        this.scale = (scale < 1 || scale > 4) ? 1 : (int) Math.pow(2, scale);
+        this.scale = scale < 1 ? 1 : scale;
+        // this.scale = (scale < 1 || scale > 4) ? 1 : (int) Math.pow(2, scale);
         colorlimit = (this.scale * this.scale) / 2;
         
         cacheTask.runTaskTimer(plugin, plugin.getRunPerTicks(), plugin.getRunPerTicks());
@@ -83,6 +84,9 @@ public class MinimapRenderer extends MapRenderer implements Listener
     {
         if (!(player.getItemInHand().getType() == Material.MAP && player.getItemInHand().getDurability() == ServerMinimap.MAPID))
             return;
+        
+        if (!worldCacheMap.containsKey(player.getWorld().getName()))
+            worldCacheMap.put(player.getWorld().getName(), new TreeMap<Integer, Map<Integer, MapChunk>>());
         
         Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(player.getWorld().getName());
         
@@ -164,8 +168,23 @@ public class MinimapRenderer extends MapRenderer implements Listener
             int x = ((c.getX() - player.getLocation().getBlockX()) / scale) * 2;
             int z = ((c.getZ() - player.getLocation().getBlockZ()) / scale) * 2;
             
-            if (Math.abs(x) > 128 || Math.abs(z) > 128)
-                continue;
+            if (Math.abs(x) > 127)
+            {
+                if (c.isShownOutside())
+                    x = c.getX() > player.getLocation().getBlockX() ? 127 : -128;
+                else
+                    continue;
+            }
+            
+            if (Math.abs(z) > 127)
+            {
+                if (c.isShownOutside())
+                    z = c.getZ() > player.getLocation().getBlockZ() ? 127 : -128;
+                else
+                    continue;
+            }
+            
+            plugin.getLogger().info(x + " " + z);
             
             cursors.addCursor(x, z, c.getDirection(), c.getType().getValue(), c.isVisible());
         }

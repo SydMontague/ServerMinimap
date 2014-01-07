@@ -9,10 +9,11 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 
 import de.craftlancer.serverminimap.ServerMinimap;
 
-public class WaypointCommandHandler
+public class WaypointCommandHandler implements TabExecutor
 {
     private HashMap<String, WaypointSubCommand> commands = new HashMap<String, WaypointSubCommand>();
     
@@ -25,6 +26,7 @@ public class WaypointCommandHandler
         commands.put("hide", new WaypointHideCommand("minimap.command.hide", plugin));
     }
     
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (args.length == 0 || !commands.containsKey(args[0]))
@@ -38,7 +40,8 @@ public class WaypointCommandHandler
         return true;
     }
     
-    public List<String> onTabComplete(CommandSender sender, String[] args)
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args)
     {
         switch (args.length)
         {
