@@ -189,6 +189,7 @@ public class ServerMinimap extends JavaPlugin
         }
         
         getLogger().info("Created Minimap with ID " + MAPID + ". Use /give <name> MAP 1 " + MAPID + " to get the map as item. (Vanilla command)");
+        getLogger().info("Alternative command: /minimap (Plugin command)");
     }
     
     public WaypointHandler getWaypointHandler()

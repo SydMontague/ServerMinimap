@@ -1,6 +1,6 @@
 name: ServerMinimap
 main: de.craftlancer.serverminimap.ServerMinimap
-version: 0.5.1
+version: 0.6.0
 author: SydMontague
 description: A serverside Minimap via maps.
 permissions:
@@ -13,4 +13,18 @@ commands:
     minimap:
         usage: /minimap
         description: Gives you a minimap item
-        
+permissions:
+    minimap.fastupdate:
+        default: false
+    minimap.command.waypoint.help:
+        default: false
+    minimap.command.waypoint.list:
+        default: false
+    minimap.command.waypoint.add:
+        default: false
+    minimap.command.waypoint.remove:
+        default: false
+    minimap.command.waypoint.hide:
+        default: false
+    minimap.command.minimap:
+        default: op
