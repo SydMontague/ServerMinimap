@@ -9,5 +9,8 @@ permissions:
         default: false
 commands:
     waypoint:
-        usage: /waypoint
+        usage: /waypoint help
+    minimap:
+        usage: /minimap
+        description: Gives you a minimap item
         

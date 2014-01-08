@@ -9,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_7_R1.util.CraftMagicNumbers;
 
 import de.craftlancer.serverminimap.nmscompat.INMSHandler;
-import de.craftlancer.serverminimap.nmscompat.v1_7_R1.MaterialMapColorWrapper;
 
 public class NMSHandler implements INMSHandler
 {

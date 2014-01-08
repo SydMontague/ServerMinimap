@@ -1,7 +1,7 @@
 package de.craftlancer.serverminimap.nmscompat.v1_5_R3;
 
-import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
 import net.minecraft.server.v1_6_R3.MaterialMapColor;
+import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
 
 public class MaterialMapColorWrapper implements MaterialMapColorInterface
 {
@@ -11,12 +11,11 @@ public class MaterialMapColorWrapper implements MaterialMapColorInterface
     {
         this.color = color;
     }
-
+    
     @Override
     public int getM()
     {
         return color.q;
     }
-
     
 }

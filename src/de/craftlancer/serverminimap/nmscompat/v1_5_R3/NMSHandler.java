@@ -43,7 +43,7 @@ public class NMSHandler implements INMSHandler
     {
         net.minecraft.server.v1_6_R3.Block block = net.minecraft.server.v1_6_R3.Block.byId[b.getTypeId()];
         
-        if(block == null || block.material == null)
+        if (block == null || block.material == null)
             return getColorNeutral();
         
         MaterialMapColor nms = block.material.H;

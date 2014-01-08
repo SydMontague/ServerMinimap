@@ -9,7 +9,6 @@ import org.bukkit.block.Block;
 
 import de.craftlancer.serverminimap.nmscompat.INMSHandler;
 import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
-import de.craftlancer.serverminimap.nmscompat.v1_6_R3.MaterialMapColorWrapper;
 
 public class NMSHandler implements INMSHandler
 {
@@ -43,7 +42,7 @@ public class NMSHandler implements INMSHandler
     {
         net.minecraft.server.v1_6_R3.Block block = net.minecraft.server.v1_6_R3.Block.byId[b.getTypeId()];
         
-        if(block == null || block.material == null)
+        if (block == null || block.material == null)
             return getColorNeutral();
         
         MaterialMapColor nms = block.material.H;

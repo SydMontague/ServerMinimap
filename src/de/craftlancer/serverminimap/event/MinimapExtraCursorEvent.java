@@ -10,7 +10,8 @@ import org.bukkit.event.HandlerList;
 import de.craftlancer.serverminimap.ExtraCursor;
 
 /**
- * This event allows the add own markers to the minimap and is called every tick.
+ * This event allows the add own markers to the minimap and is called every
+ * tick.
  */
 public class MinimapExtraCursorEvent extends Event
 {

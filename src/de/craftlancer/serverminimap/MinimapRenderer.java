@@ -30,8 +30,8 @@ import org.bukkit.map.MapCursorCollection;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
-import de.craftlancer.serverminimap.event.MinimapPlayerCursorEvent;
 import de.craftlancer.serverminimap.event.MinimapExtraCursorEvent;
+import de.craftlancer.serverminimap.event.MinimapPlayerCursorEvent;
 import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
 
 public class MinimapRenderer extends MapRenderer implements Listener
@@ -56,7 +56,6 @@ public class MinimapRenderer extends MapRenderer implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         
         this.scale = scale < 1 ? 1 : scale;
-        // this.scale = (scale < 1 || scale > 4) ? 1 : (int) Math.pow(2, scale);
         colorlimit = (this.scale * this.scale) / 2;
         
         cacheTask.runTaskTimer(plugin, plugin.getRunPerTicks(), plugin.getRunPerTicks());
@@ -131,6 +130,38 @@ public class MinimapRenderer extends MapRenderer implements Listener
         while (cursors.size() > 0)
             cursors.removeCursor(cursors.getCursor(0));
         
+        MinimapExtraCursorEvent e = new MinimapExtraCursorEvent(player);
+        plugin.getServer().getPluginManager().callEvent(e);
+        
+        for (ExtraCursor c : e.getCursors())
+        {
+            if (!c.getWorld().equalsIgnoreCase(player.getWorld().getName()))
+                continue;
+            
+            int x = ((c.getX() - player.getLocation().getBlockX()) / scale) * 2;
+            int z = ((c.getZ() - player.getLocation().getBlockZ()) / scale) * 2;
+            
+            if (Math.abs(x) > 127)
+                if (c.isShownOutside())
+                    x = c.getX() > player.getLocation().getBlockX() ? 127 : -128;
+                else
+                    continue;
+            
+            if (Math.abs(z) > 127)
+                if (c.isShownOutside())
+                    z = c.getZ() > player.getLocation().getBlockZ() ? 127 : -128;
+                else
+                    continue;
+            
+            cursors.addCursor(x, z, c.getDirection(), c.getType().getValue(), c.isVisible());
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCursor(MinimapExtraCursorEvent e)
+    {
+        Player player = e.getPlayer();
+        
         for (Player p : plugin.getServer().getOnlinePlayers())
         {
             if (!p.getWorld().equals(player.getWorld()))
@@ -144,49 +175,13 @@ public class MinimapRenderer extends MapRenderer implements Listener
             if (direction > 15)
                 direction = 0;
             
-            int x = ((p.getLocation().getBlockX() - player.getLocation().getBlockX()) / scale) * 2;
-            int z = ((p.getLocation().getBlockZ() - player.getLocation().getBlockZ()) / scale) * 2;
+            int x = p.getLocation().getBlockX();
+            int z = p.getLocation().getBlockZ();
             
-            if (Math.abs(x) > 128 || Math.abs(z) > 128)
-                continue;
+            MinimapPlayerCursorEvent event = new MinimapPlayerCursorEvent(player, p, plugin.canSeeOthers());
+            plugin.getServer().getPluginManager().callEvent(event);
             
-            MinimapPlayerCursorEvent e = new MinimapPlayerCursorEvent(player, p, plugin.canSeeOthers());
-            plugin.getServer().getPluginManager().callEvent(e);
-            
-            if (e.isCursorShown())
-                cursors.addCursor(x, z, direction, e.getType().getValue());
-        }
-        
-        MinimapExtraCursorEvent e = new MinimapExtraCursorEvent(player);
-        plugin.getServer().getPluginManager().callEvent(e);
-        
-        for (ExtraCursor c : e.getCursors())
-        {
-            if (!c.getWorld().equalsIgnoreCase(player.getWorld().getName()))
-                continue;
-            
-            int x = ((c.getX() - player.getLocation().getBlockX()) / scale) * 2;
-            int z = ((c.getZ() - player.getLocation().getBlockZ()) / scale) * 2;
-            
-            if (Math.abs(x) > 127)
-            {
-                if (c.isShownOutside())
-                    x = c.getX() > player.getLocation().getBlockX() ? 127 : -128;
-                else
-                    continue;
-            }
-            
-            if (Math.abs(z) > 127)
-            {
-                if (c.isShownOutside())
-                    z = c.getZ() > player.getLocation().getBlockZ() ? 127 : -128;
-                else
-                    continue;
-            }
-            
-            plugin.getLogger().info(x + " " + z);
-            
-            cursors.addCursor(x, z, c.getDirection(), c.getType().getValue(), c.isVisible());
+            e.getCursors().add(new ExtraCursor(x, z, player == p || event.isCursorShown(), event.getType(), direction, p.getWorld().getName(), false));
         }
     }
     
@@ -199,6 +194,9 @@ public class MinimapRenderer extends MapRenderer implements Listener
     
     public void loadData(int x, int z, String world)
     {
+        if (!worldCacheMap.containsKey(world))
+            worldCacheMap.put(world, new TreeMap<Integer, Map<Integer, MapChunk>>());
+        
         Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(world);
         
         if (!cacheMap.containsKey(x))
@@ -238,6 +236,9 @@ public class MinimapRenderer extends MapRenderer implements Listener
     
     public void loadBlock(int initX, int initZ, String world)
     {
+        if (!worldCacheMap.containsKey(world))
+            worldCacheMap.put(world, new TreeMap<Integer, Map<Integer, MapChunk>>());
+        
         Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(world);
         
         int locX = initX / scale;
@@ -254,11 +255,11 @@ public class MinimapRenderer extends MapRenderer implements Listener
         int sz = Math.abs((locZ + 16 * Math.abs(z))) % 16;
         
         if (!cacheMap.containsKey(x))
-            return;// cacheMap.put(x, new TreeMap<Integer, MapChunk>());
-            
+            return;
+        
         if (!cacheMap.get(x).containsKey(z))
-            return;// cacheMap.get(x).put(z, new MapChunk());
-            
+            return;
+        
         MapChunk map = cacheMap.get(x).get(z);
         map.set(sx, sz, renderBlock((x * 16 + sx) * scale, (z * 16 + sz) * scale, world));
     }

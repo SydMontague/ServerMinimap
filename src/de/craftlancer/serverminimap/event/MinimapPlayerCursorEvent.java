@@ -60,10 +60,11 @@ public class MinimapPlayerCursorEvent extends Event
     public void setType(Type type)
     {
         this.type = type;
-    }   
-
+    }
+    
     /**
-     * Get if the viewing player get a cursor displayed on his map for the viewed player.
+     * Get if the viewing player get a cursor displayed on his map for the
+     * viewed player.
      * 
      * @return true if shown, false if not
      */

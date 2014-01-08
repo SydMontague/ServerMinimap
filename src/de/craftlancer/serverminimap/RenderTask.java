@@ -20,6 +20,7 @@ public class RenderTask extends BukkitRunnable
         while (chunks < renderer.getChunksPerRun())
         {
             Coords c = renderer.getQueue().poll();
+            
             if (c == null)
                 break;
             

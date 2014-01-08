@@ -19,7 +19,7 @@ public class WaypointAddCommand extends WaypointSubCommand
     {
         if (!checkSender(sender))
             sender.sendMessage("You don't have permission for this command!");
-        else if (args.length < 1 || args.length >= 3)
+        else if (args.length < 1)
             help(sender);
         else
         {
@@ -44,7 +44,7 @@ public class WaypointAddCommand extends WaypointSubCommand
                 z = ((Player) sender).getLocation().getBlockZ();
             }
             
-            if(args.length >= 4)
+            if (args.length >= 4)
                 world = args[3];
             else
                 world = ((Player) sender).getWorld().getName();
@@ -58,5 +58,4 @@ public class WaypointAddCommand extends WaypointSubCommand
     {
         sender.sendMessage("/waypoint add for waypoint on your location, /waypoint add <x> <z> for remote waypoint.");
     }
-    
 }

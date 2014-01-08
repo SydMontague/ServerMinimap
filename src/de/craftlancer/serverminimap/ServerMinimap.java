@@ -32,7 +32,7 @@ public class ServerMinimap extends JavaPlugin
     private boolean canSeeOthers;
     private boolean distantWaypoints;
     
-    private WaypointHandler waypoint = new WaypointHandler(this);
+    private WaypointHandler waypoint;
     
     private INMSHandler nms;
     
@@ -44,10 +44,12 @@ public class ServerMinimap extends JavaPlugin
         loadConfig();
         loadMap();
         
+        waypoint = new WaypointHandler(this);
         waypoint.load();
         getServer().getPluginManager().registerEvents(waypoint, this);
         
         getCommand("waypoint").setExecutor(new WaypointCommandHandler(this));
+        getCommand("minimap").setExecutor(new MinimapCommand());
         
         try
         {
@@ -84,6 +86,16 @@ public class ServerMinimap extends JavaPlugin
                 }
             });
             
+            Graph ftGraph = metrics.createGraph("Fastsend per Ticks");
+            ftGraph.addPlotter(new Metrics.Plotter(String.valueOf(fastTicks))
+            {
+                @Override
+                public int getValue()
+                {
+                    return 1;
+                }
+            });
+            
             metrics.start();
         }
         catch (IOException e)
@@ -100,7 +112,7 @@ public class ServerMinimap extends JavaPlugin
         {
             Class<?> c = Class.forName("de.craftlancer.serverminimap.nmscompat." + version + ".NMSHandler");
             if (INMSHandler.class.isAssignableFrom(c))
-                this.nms = (INMSHandler) c.getConstructor().newInstance();
+                nms = (INMSHandler) c.getConstructor().newInstance();
         }
         catch (Exception e)
         {
@@ -176,14 +188,14 @@ public class ServerMinimap extends JavaPlugin
             map.addRenderer(new MinimapRenderer(SCALE, CPR, this));
         }
         
-        getLogger().info("Created Minimap with ID " + MAPID + ". Use /give <name> MAP 1 " + MAPID + " to get the map as item.");
+        getLogger().info("Created Minimap with ID " + MAPID + ". Use /give <name> MAP 1 " + MAPID + " to get the map as item. (Vanilla command)");
     }
     
     public WaypointHandler getWaypointHandler()
     {
         return waypoint;
     }
-
+    
     public boolean showDistantWaypoints()
     {
         return distantWaypoints;

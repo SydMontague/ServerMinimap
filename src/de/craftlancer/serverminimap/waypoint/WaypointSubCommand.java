@@ -55,5 +55,4 @@ public abstract class WaypointSubCommand
     }
     
     public abstract void help(CommandSender sender);
-
 }

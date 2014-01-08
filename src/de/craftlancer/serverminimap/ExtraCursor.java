@@ -147,7 +147,7 @@ public class ExtraCursor
     {
         this.direction = (byte) (direction % 16);
     }
-
+    
     /**
      * Get the world the cursor is shown in.
      * 
@@ -157,9 +157,10 @@ public class ExtraCursor
     {
         return world;
     }
-
+    
     /**
      * Set the world the cursor is shown in.
+     * 
      * @param world the name of the world (World#getName())
      */
     public void setWorld(String world)
@@ -172,7 +173,7 @@ public class ExtraCursor
     {
         return x + " " + z + " " + world;
     }
-
+    
     public boolean isShownOutside()
     {
         return outside;
@@ -180,6 +181,6 @@ public class ExtraCursor
     
     public void setShowOutside(boolean bool)
     {
-        this.outside = bool;
+        outside = bool;
     }
 }

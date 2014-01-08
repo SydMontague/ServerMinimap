@@ -11,7 +11,7 @@ public class MaterialMapColorWrapper implements MaterialMapColorInterface
     {
         this.color = color;
     }
-
+    
     @Override
     public int getM()
     {

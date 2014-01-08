@@ -46,6 +46,7 @@ public class WaypointHideCommand extends WaypointSubCommand
             else
                 hide = !w.isVisible();
             
+            plugin.getWaypointHandler().updateVisibility(sender.getName(), index, hide);
             w.setVisible(hide);
         }
     }
