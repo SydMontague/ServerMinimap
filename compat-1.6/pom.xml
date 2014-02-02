@@ -7,9 +7,7 @@
     <artifactId>serverminimap</artifactId>
     <version>0.7.0-SNAPSHOT</version>
   </parent>
-  <groupId>de.craftlancer</groupId>
   <artifactId>compat-1.6</artifactId>
-  <version>0.7.0-SNAPSHOT</version>
   <name>compat-1.6</name>
   <url>http://maven.apache.org</url>
   <properties>

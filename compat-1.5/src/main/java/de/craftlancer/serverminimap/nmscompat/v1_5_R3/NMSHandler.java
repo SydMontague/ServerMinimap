@@ -37,7 +37,6 @@ public class NMSHandler implements INMSHandler
         return colors.get(MaterialMapColor.b);
     }
     
-    @SuppressWarnings("deprecation")
     @Override
     public MaterialMapColorInterface getBlockColor(Block b)
     {
