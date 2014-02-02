@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>de.craftlancer</groupId>
+    <artifactId>serverminimap</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
+  </parent>
+  <groupId>de.craftlancer</groupId>
+  <artifactId>compat-1.6</artifactId>
+  <version>0.7.0-SNAPSHOT</version>
+  <name>compat-1.6</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.bukkit</groupId>
+      <artifactId>craftbukkit</artifactId>
+      <version>1.6.4-R2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>de.craftlancer</groupId>
+      <artifactId>serverminimap</artifactId>
+      <version>0.7.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>

@@ -2,14 +2,14 @@ package de.craftlancer.serverminimap.nmscompat.v1_5_R3;
 
 import java.util.HashMap;
 
-import net.minecraft.server.v1_6_R3.MaterialMapColor;
+import net.minecraft.server.v1_5_R3.MaterialMapColor;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 
 import de.craftlancer.serverminimap.nmscompat.INMSHandler;
 import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
-import de.craftlancer.serverminimap.nmscompat.v1_6_R3.MaterialMapColorWrapper;
+import de.craftlancer.serverminimap.nmscompat.v1_5_R3.MaterialMapColorWrapper;
 
 public class NMSHandler implements INMSHandler
 {
@@ -41,12 +41,12 @@ public class NMSHandler implements INMSHandler
     @Override
     public MaterialMapColorInterface getBlockColor(Block b)
     {
-        net.minecraft.server.v1_6_R3.Block block = net.minecraft.server.v1_6_R3.Block.byId[b.getTypeId()];
+        net.minecraft.server.v1_5_R3.Block block = net.minecraft.server.v1_5_R3.Block.byId[b.getTypeId()];
         
         if (block == null || block.material == null)
             return getColorNeutral();
         
-        MaterialMapColor nms = block.material.H;
+        MaterialMapColor nms = block.material.G;
         
         if (!colors.containsKey(nms))
             Bukkit.getLogger().severe("[ServerMinimap] unknown color, error in NMSHandler - please report to author!");
