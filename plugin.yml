@@ -10,6 +10,7 @@ permissions:
 commands:
     waypoint:
         usage: /waypoint help
+        aliases: [wp, mwp]
     minimap:
         usage: /minimap
         description: Gives you a minimap item

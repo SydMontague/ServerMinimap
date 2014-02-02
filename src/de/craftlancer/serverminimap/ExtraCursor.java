@@ -50,7 +50,7 @@ public class ExtraCursor
      * Set the x coordinate of the marker.
      * 
      * @param x
-     *            the x coordinate in the MC coordinate system.
+     *        the x coordinate in the MC coordinate system.
      */
     public void setX(int x)
     {
@@ -71,7 +71,7 @@ public class ExtraCursor
      * Set the z coordinate of the marker.
      * 
      * @param z
-     *            the z coordinate in the MC coordinate system.
+     *        the z coordinate in the MC coordinate system.
      */
     public void setZ(int z)
     {
@@ -92,7 +92,7 @@ public class ExtraCursor
      * Set the visibility of the marker.
      * 
      * @param visible
-     *            true for a visible marker, false for invisible
+     *        true for a visible marker, false for invisible
      */
     public void setVisible(boolean visible)
     {
@@ -115,7 +115,7 @@ public class ExtraCursor
      * See MapCursor.Type for available types.
      * 
      * @param type
-     *            the type of the cursor
+     *        the type of the cursor
      */
     public void setType(MapCursor.Type type)
     {
@@ -140,8 +140,8 @@ public class ExtraCursor
      * are 22,5 degree rotation.
      * 
      * @param direction
-     *            s byte value. It makes sure that the direction value is always
-     *            between 0 and 15 by calculating the input with mod 16.
+     *        s byte value. It makes sure that the direction value is always
+     *        between 0 and 15 by calculating the input with mod 16.
      */
     public void setDirection(byte direction)
     {

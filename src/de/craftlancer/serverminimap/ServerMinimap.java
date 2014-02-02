@@ -3,9 +3,11 @@ package de.craftlancer.serverminimap;
 import java.io.File;
 import java.io.IOException;
 
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.craftlancer.serverminimap.metrics.Metrics;
@@ -149,6 +151,28 @@ public class ServerMinimap extends JavaPlugin
         canSeeOthers = config.getBoolean("canSeeOthers", true);
         MAPID = (short) config.getInt("mapID", 0);
         distantWaypoints = config.getBoolean("showDistantWaypoints", false);
+        
+        for (String s : config.getConfigurationSection("worlds").getKeys(false))
+        {
+            World w = getServer().getWorld(s);
+            
+            if (w == null)
+                continue;
+            
+            if (!config.getBoolean("worlds." + s + ".enabled", true))
+                w.setMetadata("minimap.enabled", new FixedMetadataValue(this, null));
+            
+            if (config.isInt("worlds." + s + ".drawHeight"))
+                w.setMetadata("minimap.drawheight", new FixedMetadataValue(this, config.getInt("worlds." + s + ".drawHeight")));
+            
+            if (config.isInt("worlds." + s + ".scale"))
+            {
+                int value = config.getInt("worlds." + s + ".scale");
+                if (value < 1)
+                    value = 1;
+                w.setMetadata("minimap.scale", new FixedMetadataValue(this, value));
+            }
+        }
     }
     
     public int getRunPerTicks()

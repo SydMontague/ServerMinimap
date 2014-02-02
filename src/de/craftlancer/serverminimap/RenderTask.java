@@ -33,7 +33,7 @@ public class RenderTask extends BukkitRunnable
             {
                 renderer.loadBlock(c.getX(), c.getZ(), c.getWorld());
                 blocks++;
-                if (blocks >= 16 * 16 * renderer.getScale() * renderer.getScale())
+                if (blocks >= 16 * 16 * renderer.getDefaultScale() * renderer.getDefaultScale())
                 {
                     blocks = 0;
                     chunks++;

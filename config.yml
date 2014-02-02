@@ -1,4 +1,4 @@
-scale: 0
+scale: 1
 chunksPerRun: 4
 runPerTicks: 5
 fastTicks: 20
@@ -11,3 +11,8 @@ mysql:
   user: user
   pass: password
   database: database
+worlds:
+  world_nether:
+    enabled: true
+    drawHeight: 75
+    scale: 2

@@ -41,7 +41,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
     private RenderTask cacheTask = new RenderTask(this);
     private SendTask sendTask = new SendTask();
     
-    private int scale = 0;
+    private int globalScale = 0;
     private int cpr = 0;
     private int colorlimit;
     private ServerMinimap plugin;
@@ -55,16 +55,16 @@ public class MinimapRenderer extends MapRenderer implements Listener
         
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         
-        this.scale = scale < 1 ? 1 : scale;
-        colorlimit = (this.scale * this.scale) / 2;
+        globalScale = scale < 1 ? 1 : scale;
+        colorlimit = (globalScale * globalScale) / 2;
         
         cacheTask.runTaskTimer(plugin, plugin.getRunPerTicks(), plugin.getRunPerTicks());
         sendTask.runTaskTimer(plugin, plugin.getFastTicks(), plugin.getFastTicks());
     }
     
-    public int getScale()
+    public int getDefaultScale()
     {
-        return scale;
+        return globalScale;
     }
     
     public int getChunksPerRun()
@@ -84,10 +84,15 @@ public class MinimapRenderer extends MapRenderer implements Listener
         if (!(player.getItemInHand().getType() == Material.MAP && player.getItemInHand().getDurability() == ServerMinimap.MAPID))
             return;
         
+        if (player.getWorld().hasMetadata("minimap.disabled"))
+            return;
+        
         if (!worldCacheMap.containsKey(player.getWorld().getName()))
             worldCacheMap.put(player.getWorld().getName(), new TreeMap<Integer, Map<Integer, MapChunk>>());
         
         Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(player.getWorld().getName());
+        
+        int scale = player.getWorld().hasMetadata("minimap.scale") ? player.getWorld().getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
         
         int locX = player.getLocation().getBlockX() / scale - 64;
         int locZ = player.getLocation().getBlockZ() / scale - 64;
@@ -197,6 +202,9 @@ public class MinimapRenderer extends MapRenderer implements Listener
         if (!worldCacheMap.containsKey(world))
             worldCacheMap.put(world, new TreeMap<Integer, Map<Integer, MapChunk>>());
         
+        World w = plugin.getServer().getWorld(world);
+        int scale = w.hasMetadata("minimap.scale") ? w.getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
+        
         Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(world);
         
         if (!cacheMap.containsKey(x))
@@ -241,6 +249,9 @@ public class MinimapRenderer extends MapRenderer implements Listener
         
         Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(world);
         
+        World w = plugin.getServer().getWorld(world);
+        int scale = w.hasMetadata("minimap.scale") ? w.getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
+        
         int locX = initX / scale;
         int locZ = initZ / scale;
         
@@ -270,11 +281,18 @@ public class MinimapRenderer extends MapRenderer implements Listener
         short avgY = 0;
         MaterialMapColorInterface mainColor = null;
         World world = plugin.getServer().getWorld(strworld);
+        int scale = world.hasMetadata("minimap.scale") ? world.getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
+        
+        boolean changedHeight = world.hasMetadata("minimap.drawheight");
+        int y = changedHeight ? world.getMetadata("minimap.drawheight").get(0).asInt() : 0;
         
         for (int k = 0; k < scale; k++)
             for (int l = 0; l < scale; l++)
             {
-                Block b = world.getBlockAt(baseX + k, world.getHighestBlockYAt(baseX + k, baseZ + l) + 1, baseZ + l);
+                if (!changedHeight)
+                    y = world.getHighestBlockYAt(baseX + k, baseZ + l) + 1;
+                
+                Block b = world.getBlockAt(baseX + k, y, baseZ + l);
                 
                 if (!b.getChunk().isLoaded())
                     b.getChunk().load();
