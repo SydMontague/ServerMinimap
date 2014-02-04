@@ -20,7 +20,7 @@ public class ExtraCursor
      * Construct a new ExtraCursor object.
      * 
      * @param x - the absolute x coordinates of the cursor
-     * @param z - the absolute z coordiantes of the cursor
+     * @param z - the absolute z coordinates of the cursor
      * @param visible - whether the cursor is visible or not
      * @param type - the type/shape of the cursor
      * @param direction - the direction the cursor is pointing at
@@ -49,8 +49,7 @@ public class ExtraCursor
     /**
      * Set the x coordinate of the marker.
      * 
-     * @param x
-     *        the x coordinate in the MC coordinate system.
+     * @param x the x coordinate in the MC coordinate system.
      */
     public void setX(int x)
     {
@@ -70,8 +69,7 @@ public class ExtraCursor
     /**
      * Set the z coordinate of the marker.
      * 
-     * @param z
-     *        the z coordinate in the MC coordinate system.
+     * @param z the z coordinate in the MC coordinate system.
      */
     public void setZ(int z)
     {
@@ -91,8 +89,7 @@ public class ExtraCursor
     /**
      * Set the visibility of the marker.
      * 
-     * @param visible
-     *        true for a visible marker, false for invisible
+     * @param visible true for a visible marker, false for invisible
      */
     public void setVisible(boolean visible)
     {
@@ -114,8 +111,7 @@ public class ExtraCursor
      * Set the shape of the cursor.
      * See MapCursor.Type for available types.
      * 
-     * @param type
-     *        the type of the cursor
+     * @param type the type of the cursor
      */
     public void setType(MapCursor.Type type)
     {
