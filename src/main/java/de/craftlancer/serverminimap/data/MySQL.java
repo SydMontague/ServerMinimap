@@ -52,6 +52,7 @@ public class MySQL implements DataHandler
             {
                 PreparedStatement st = getConnection().prepareStatement("CREATE TABLE waypoints ( player varchar(255), x int, z int, world varchar(255), visible boolean )");
                 st.execute();
+                st.close();
             }
         }
         catch (SQLException e)
@@ -114,6 +115,8 @@ public class MySQL implements DataHandler
                 
                 waypoints.get(player).add(new ExtraCursor(x, z, visible, Type.WHITE_CROSS, (byte) 0, world, plugin.showDistantWaypoints()));
             }
+            
+            rs.close();
             return waypoints;
         }
         catch (SQLException e)
