@@ -9,6 +9,12 @@
   <artifactId>serverminimap-v1.5-R3</artifactId>
   <version>v1.5-R3</version>
 
+  <parent>
+    <artifactId>ServerMinimap</artifactId>
+    <groupId>de.craftlancer</groupId>
+    <version>parent</version>
+  </parent>
+
   <dependencies>
     <dependency>
       <groupId>org.bukkit</groupId>
@@ -21,7 +27,7 @@
       <version>API</version>
     </dependency>
   </dependencies>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

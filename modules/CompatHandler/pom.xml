@@ -5,14 +5,13 @@
   <artifactId>serverminimap-nmshandler</artifactId>
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <artifactId>ServerMinimap</artifactId>
+    <groupId>de.craftlancer</groupId>
+    <version>parent</version>
+  </parent>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <dependencies>
-    <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>bukkit</artifactId>
-      <version>1.7.2-R0.2</version>
-    </dependency>
-  </dependencies>
 </project>

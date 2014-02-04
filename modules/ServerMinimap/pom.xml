@@ -6,6 +6,12 @@
   <name>ServerMinimap</name>
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <artifactId>ServerMinimap</artifactId>
+    <groupId>de.craftlancer</groupId>
+    <version>parent</version>
+  </parent>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -40,7 +46,8 @@
         <directory>../../src/main/resources</directory>
         <filtering>true</filtering>
       </resource>
-    </resources>    <finalName>${project.name}</finalName>
+    </resources>
+    <finalName>${project.name}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
