@@ -26,20 +26,4 @@
       <url>http://repo.bukkit.org/content/groups/public/</url>
     </repository>
   </repositories>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.bukkit</groupId>
-        <artifactId>bukkit</artifactId>
-        <version>1.7.2-R0.2</version>
-      </dependency>
-      <dependency>
-        <groupId>de.craftlancer</groupId>
-        <artifactId>serverminimap-nmshandler</artifactId>
-        <version>API</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
 </project>
