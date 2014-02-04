@@ -10,7 +10,7 @@
   <version>v1.7-R2</version>
 
   <parent>
-    <artifactId>ServerMinimap</artifactId>
+    <artifactId>serverminimap</artifactId>
     <groupId>de.craftlancer</groupId>
     <version>parent</version>
   </parent>
