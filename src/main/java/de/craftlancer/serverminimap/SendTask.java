@@ -14,7 +14,7 @@ public class SendTask extends BukkitRunnable
         for (Player p : Bukkit.getOnlinePlayers())
             if (p.hasPermission("minimap.fastupdate"))
                 if (p.getItemInHand().getType() == Material.MAP && p.getItemInHand().getDurability() == ServerMinimap.MAPID)
-                    p.sendMap(Bukkit.getMap((short) 0));
+                    p.sendMap(Bukkit.getMap(ServerMinimap.MAPID));
     }
     
 }

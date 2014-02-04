@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>serverminimap</artifactId>
+  <groupId>de.craftlancer</groupId>
+  <version>0.7.0-SNAPSHOT</version>
+  <name>ServerMinimap</name>
+  <modelVersion>4.0.0</modelVersion>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>de.craftlancer</groupId>
+      <artifactId>serverminimap-nmshandler</artifactId>
+      <version>API</version>
+    </dependency>
+    <dependency>
+      <groupId>de.craftlancer</groupId>
+      <artifactId>serverminimap-v1.5-R3</artifactId>
+      <version>v1.5-R3</version>
+    </dependency>
+    <dependency>
+      <groupId>de.craftlancer</groupId>
+      <artifactId>serverminimap-v1.6-R3</artifactId>
+      <version>v1.6-R3</version>
+    </dependency>
+    <dependency>
+      <groupId>de.craftlancer</groupId>
+      <artifactId>serverminimap-v1.7-R2</artifactId>
+      <version>v1.7-R2</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <directory>../../target</directory>
+    <sourceDirectory>../../src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>../../src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>    <finalName>${project.name}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>de.craftlancer:serverminimap*</include>
+                </includes>
+              </artifactSet>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

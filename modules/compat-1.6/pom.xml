@@ -2,14 +2,13 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>de.craftlancer</groupId>
-    <artifactId>serverminimap</artifactId>
-    <version>0.7.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>compat-1.7</artifactId>
-  <name>compat-1.7</name>
-  <url>http://maven.apache.org</url>
+
+
+  <groupId>de.craftlancer</groupId>
+  <name>compat-1.6</name>
+  <artifactId>serverminimap-v1.6-R3</artifactId>
+  <version>v1.6-R3</version>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -17,12 +16,12 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.7.2-R0.2</version>
+      <version>1.6.4-R2.0</version>
     </dependency>
     <dependency>
       <groupId>de.craftlancer</groupId>
-      <artifactId>serverminimap</artifactId>
-      <version>0.7.0-SNAPSHOT</version>
+      <artifactId>serverminimap-nmshandler</artifactId>
+      <version>API</version>
     </dependency>
   </dependencies>
 </project>
