@@ -9,6 +9,7 @@
     <artifactId>serverminimap</artifactId>
     <groupId>de.craftlancer</groupId>
     <version>parent</version>
+    <relativePath>../../</relativePath>
   </parent>
 
   <properties>
