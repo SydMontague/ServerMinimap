@@ -160,7 +160,7 @@ public class ServerMinimap extends JavaPlugin
                 continue;
             
             if (!config.getBoolean("worlds." + s + ".enabled", true))
-                w.setMetadata("minimap.enabled", new FixedMetadataValue(this, null));
+                w.setMetadata("minimap.disabled", new FixedMetadataValue(this, null));
             
             if (config.isInt("worlds." + s + ".drawHeight"))
                 w.setMetadata("minimap.drawheight", new FixedMetadataValue(this, config.getInt("worlds." + s + ".drawHeight")));
