@@ -9,9 +9,9 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
+import org.mcstats.Metrics.Graph;
 
-import de.craftlancer.serverminimap.metrics.Metrics;
-import de.craftlancer.serverminimap.metrics.Metrics.Graph;
 import de.craftlancer.serverminimap.nmscompat.INMSHandler;
 import de.craftlancer.serverminimap.waypoint.WaypointCommandHandler;
 import de.craftlancer.serverminimap.waypoint.WaypointHandler;
