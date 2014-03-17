@@ -6,19 +6,6 @@
   <name>ServerMinimap</name>
   <modelVersion>4.0.0</modelVersion>
 
-  <distributionManagement>
-    <repository>
-      <name>Craftlancer Releases</name>
-      <id>releases</id>
-      <url>http://repo.craftlancer.de/content/repositories/releases</url>
-    </repository>
-    <snapshotRepository>
-      <name>Craftlancer Snapshots</name>
-      <id>snapshots</id>
-      <url>http://repo.craftlancer.de/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <parent>
     <artifactId>serverminimap</artifactId>
     <groupId>de.craftlancer</groupId>
