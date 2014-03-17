@@ -12,6 +12,20 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <distributionManagement>
+    <repository>
+      <name>Craftlancer Releases</name>
+      <id>releases</id>
+      <url>http://repo.craftlancer.de/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <name>Craftlancer Snapshots</name>
+      <id>snapshots</id>
+      <url>http://repo.craftlancer.de/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+
   <modules>
     <module>modules/CompatHandler</module>
     <module>modules/compat-1.5</module>
@@ -38,7 +52,7 @@
       <artifactId>bukkit</artifactId>
       <version>1.7.2-R0.2</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.mcstats.bukkit</groupId>
       <artifactId>metrics</artifactId>
