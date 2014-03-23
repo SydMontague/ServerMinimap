@@ -92,7 +92,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
         
         Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(player.getWorld().getName());
         
-        int scale = player.getWorld().hasMetadata("minimap.scale") ? player.getWorld().getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
+        int scale = player.getWorld().hasMetadata("minimap.scale") && !player.getWorld().getMetadata("minimap.scale").isEmpty() ? player.getWorld().getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
         
         int locX = player.getLocation().getBlockX() / scale - 64;
         int locZ = player.getLocation().getBlockZ() / scale - 64;
@@ -250,7 +250,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
         Map<Integer, Map<Integer, MapChunk>> cacheMap = worldCacheMap.get(world);
         
         World w = plugin.getServer().getWorld(world);
-        int scale = w.hasMetadata("minimap.scale") ? w.getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
+        int scale = w.hasMetadata("minimap.scale") && !w.getMetadata("minimap.scale").isEmpty() ? w.getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
         
         int locX = initX / scale;
         int locZ = initZ / scale;
@@ -281,9 +281,9 @@ public class MinimapRenderer extends MapRenderer implements Listener
         short avgY = 0;
         MaterialMapColorInterface mainColor = null;
         World world = plugin.getServer().getWorld(strworld);
-        int scale = world.hasMetadata("minimap.scale") ? world.getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
+        int scale = world.hasMetadata("minimap.scale") && !world.getMetadata("minimap.scale").isEmpty() ? world.getMetadata("minimap.scale").get(0).asInt() : getDefaultScale();
         
-        boolean changedHeight = world.hasMetadata("minimap.drawheight");
+        boolean changedHeight = world.hasMetadata("minimap.drawheight") && !world.getMetadata("minimap.drawheight").isEmpty();
         int y = changedHeight ? world.getMetadata("minimap.drawheight").get(0).asInt() : 0;
         
         for (int k = 0; k < scale; k++)

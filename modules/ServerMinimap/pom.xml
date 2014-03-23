@@ -34,6 +34,11 @@
     </dependency>
     <dependency>
       <groupId>de.craftlancer</groupId>
+      <artifactId>serverminimap-v1.7-R1</artifactId>
+      <version>v1.7-R1</version>
+    </dependency>
+    <dependency>
+      <groupId>de.craftlancer</groupId>
       <artifactId>serverminimap-v1.7-R2</artifactId>
       <version>v1.7-R2</version>
     </dependency>

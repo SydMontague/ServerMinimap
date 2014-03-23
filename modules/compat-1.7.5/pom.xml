@@ -5,9 +5,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>de.craftlancer</groupId>
-  <name>compat-1.7</name>
-  <artifactId>serverminimap-v1.7-R1</artifactId>
-  <version>v1.7-R1</version>
+  <name>compat-1.7.5</name>
+  <artifactId>serverminimap-v1.7-R2</artifactId>
+  <version>v1.7-R2</version>
 
   <parent>
     <artifactId>serverminimap</artifactId>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.7.2-R0.3</version>
+      <version>1.7.5-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>de.craftlancer</groupId>
