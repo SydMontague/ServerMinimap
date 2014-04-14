@@ -49,7 +49,7 @@ public class WaypointAddCommand extends WaypointSubCommand
             else
                 world = ((Player) sender).getWorld().getName();
             
-            plugin.getWaypointHandler().addWaypoint(sender.getName(), x, z, world);
+            plugin.getWaypointHandler().addWaypoint(((Player) sender).getUniqueId(), x, z, world);
         }
     }
     

@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.map.MapCursor.Type;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import de.craftlancer.serverminimap.ExtraCursor;
 import de.craftlancer.serverminimap.ServerMinimap;
@@ -28,9 +31,9 @@ public class MySQL implements DataHandler
     private Connection conn;
     
     private PreparedStatement getstatement;
-    private PreparedStatement insertstatement;
-    private PreparedStatement removestatement;
-    private PreparedStatement updatestatement;
+    PreparedStatement insertstatement;
+    PreparedStatement removestatement;
+    PreparedStatement updatestatement;
     
     public MySQL(ServerMinimap plugin, String host, int port, String user, String pass, String database)
     {
@@ -50,7 +53,7 @@ public class MySQL implements DataHandler
             updatestatement = getConnection().prepareStatement("UPDATE waypoints SET visible = ? WHERE player = ? AND x = ? AND z = ? AND world = ?");
             if (!conn.getMetaData().getTables(null, null, "waypoints", null).next())
             {
-                PreparedStatement st = getConnection().prepareStatement("CREATE TABLE waypoints ( player varchar(255), x int, z int, world varchar(255), visible boolean )");
+                PreparedStatement st = getConnection().prepareStatement("CREATE TABLE waypoints ( player varchar(36), x int, z int, world varchar(255), visible boolean )");
                 st.execute();
                 st.close();
             }
@@ -96,24 +99,51 @@ public class MySQL implements DataHandler
     }
     
     @Override
-    public Map<String, List<ExtraCursor>> loadWaypoints()
+    public Map<UUID, List<ExtraCursor>> loadWaypoints()
     {
         try
         {
-            Map<String, List<ExtraCursor>> waypoints = new HashMap<String, List<ExtraCursor>>();
+            Map<UUID, List<ExtraCursor>> waypoints = new HashMap<UUID, List<ExtraCursor>>();
             ResultSet rs = getstatement.executeQuery();
+            
             while (rs.next())
             {
+                boolean deleteOld = false;
                 String player = rs.getString("player");
+                
+                UUID uuid = null;
+                try
+                {
+                    uuid = UUID.fromString(player);
+                }
+                catch (IllegalArgumentException e)
+                {
+                    uuid = Bukkit.getOfflinePlayer(player).getUniqueId();
+                    
+                    if (uuid != null)
+                        deleteOld = true;
+                    else
+                    {
+                        plugin.getLogger().warning("Could not resolve UUID for " + player + "! The waypoint data of this key might be lost!");
+                        continue;
+                    }
+                }
+                
                 int x = rs.getInt("x");
                 int z = rs.getInt("z");
                 String world = rs.getString("world");
                 boolean visible = rs.getBoolean("visible");
                 
-                if (!waypoints.containsKey(player))
-                    waypoints.put(player, new ArrayList<ExtraCursor>());
+                if (!waypoints.containsKey(uuid))
+                    waypoints.put(uuid, new ArrayList<ExtraCursor>());
                 
-                waypoints.get(player).add(new ExtraCursor(x, z, visible, Type.WHITE_CROSS, (byte) 0, world, plugin.showDistantWaypoints()));
+                waypoints.get(uuid).add(new ExtraCursor(x, z, visible, Type.WHITE_CROSS, (byte) 0, world, plugin.showDistantWaypoints()));
+                
+                if (deleteOld)
+                {
+                    removeOldWaypoint(player, x, z, world);
+                    addWaypoint(uuid, x, z, world, visible);
+                }
             }
             
             rs.close();
@@ -134,11 +164,11 @@ public class MySQL implements DataHandler
                 e.printStackTrace();
             }
         }
-        return new HashMap<String, List<ExtraCursor>>();
+        return new HashMap<UUID, List<ExtraCursor>>();
     }
     
     @Override
-    public void saveWaypoints(Map<String, List<ExtraCursor>> waypoints)
+    public void saveWaypoints(Map<UUID, List<ExtraCursor>> waypoints)
     {
         try
         {
@@ -151,56 +181,101 @@ public class MySQL implements DataHandler
     }
     
     @Override
-    public void addWaypoint(String player, int x, int z, String world)
+    public void addWaypoint(final UUID player, final int x, final int z, final String world, final boolean visible)
     {
-        try
+        new BukkitRunnable()
         {
-            insertstatement.setString(1, player);
-            insertstatement.setInt(2, x);
-            insertstatement.setInt(3, z);
-            insertstatement.setString(4, world);
-            insertstatement.setBoolean(5, true);
-            insertstatement.execute();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+            @Override
+            public void run()
+            {
+                try
+                {
+                    insertstatement.setString(1, player.toString());
+                    insertstatement.setInt(2, x);
+                    insertstatement.setInt(3, z);
+                    insertstatement.setString(4, world);
+                    insertstatement.setBoolean(5, visible);
+                    insertstatement.execute();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
     }
     
     @Override
-    public void removeWaypoint(String player, ExtraCursor c)
+    public void removeWaypoint(final UUID player, final ExtraCursor c)
     {
-        try
+        new BukkitRunnable()
         {
-            removestatement.setString(1, player);
-            removestatement.setInt(2, c.getX());
-            removestatement.setInt(3, c.getZ());
-            removestatement.setString(4, c.getWorld());
-            removestatement.execute();
-        }
-        catch (SQLException e)
+            @Override
+            public void run()
+            {
+                try
+                {
+                    removestatement.setString(1, player.toString());
+                    removestatement.setInt(2, c.getX());
+                    removestatement.setInt(3, c.getZ());
+                    removestatement.setString(4, c.getWorld());
+                    removestatement.execute();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+    
+    private void removeOldWaypoint(final String player, final int x, final int z, final String world)
+    {
+        new BukkitRunnable()
         {
-            e.printStackTrace();
-        }
+            @Override
+            public void run()
+            {
+                try
+                {
+                    removestatement.setString(1, player);
+                    removestatement.setInt(2, x);
+                    removestatement.setInt(3, z);
+                    removestatement.setString(4, world);
+                    removestatement.execute();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
     }
     
     @Override
-    public void updateVisible(String player, ExtraCursor c, boolean visible)
+    public void updateVisible(final UUID player, final ExtraCursor c, final boolean visible)
     {
-        try
+        
+        new BukkitRunnable()
         {
-            updatestatement.setBoolean(1, visible);
-            updatestatement.setString(2, player);
-            updatestatement.setInt(3, c.getX());
-            updatestatement.setInt(4, c.getZ());
-            updatestatement.setString(5, c.getWorld());
-            plugin.getLogger().info(updatestatement.toString());
-            updatestatement.execute();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+            @Override
+            public void run()
+            {
+                try
+                {
+                    updatestatement.setBoolean(1, visible);
+                    updatestatement.setString(2, player.toString());
+                    updatestatement.setInt(3, c.getX());
+                    updatestatement.setInt(4, c.getZ());
+                    updatestatement.setString(5, c.getWorld());
+                    plugin.getLogger().info(updatestatement.toString());
+                    updatestatement.execute();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
     }
 }

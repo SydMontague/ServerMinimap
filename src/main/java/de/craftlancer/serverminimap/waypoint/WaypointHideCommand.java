@@ -2,6 +2,7 @@ package de.craftlancer.serverminimap.waypoint;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import de.craftlancer.serverminimap.ExtraCursor;
 import de.craftlancer.serverminimap.ServerMinimap;
@@ -35,7 +36,13 @@ public class WaypointHideCommand extends WaypointSubCommand
                 return;
             }
             
-            ExtraCursor w = plugin.getWaypointHandler().getWaypoint(sender.getName(), index);
+            ExtraCursor w = plugin.getWaypointHandler().getWaypoint(((Player) sender).getUniqueId(), index);
+            
+            if (w == null)
+            {
+                sender.sendMessage("There is no waypoint with this index!");
+                return;
+            }
             
             boolean hide;
             
@@ -46,7 +53,7 @@ public class WaypointHideCommand extends WaypointSubCommand
             else
                 hide = !w.isVisible();
             
-            plugin.getWaypointHandler().updateVisibility(sender.getName(), index, hide);
+            plugin.getWaypointHandler().updateVisibility(((Player) sender).getUniqueId(), index, hide);
             w.setVisible(hide);
         }
     }

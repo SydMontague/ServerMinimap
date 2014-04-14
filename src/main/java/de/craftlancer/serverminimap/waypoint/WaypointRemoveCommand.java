@@ -2,6 +2,7 @@ package de.craftlancer.serverminimap.waypoint;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import de.craftlancer.serverminimap.ServerMinimap;
 
@@ -34,7 +35,7 @@ public class WaypointRemoveCommand extends WaypointSubCommand
                 return;
             }
             
-            if (!plugin.getWaypointHandler().removeWaypoint(sender.getName(), index))
+            if (!plugin.getWaypointHandler().removeWaypoint(((Player) sender).getUniqueId(), index))
                 sender.sendMessage("Failed to remove Waypoint. (Wrong index?)");
             else
                 sender.sendMessage("Waypoint removed!");

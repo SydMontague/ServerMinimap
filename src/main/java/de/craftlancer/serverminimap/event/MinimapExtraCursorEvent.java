@@ -26,7 +26,7 @@ public class MinimapExtraCursorEvent extends Event
     
     /**
      * Get all already added cursors.
-     * 
+     *
      * @return A mutable list of all added cursors.
      */
     public List<ExtraCursor> getCursors()
@@ -36,7 +36,7 @@ public class MinimapExtraCursorEvent extends Event
     
     /**
      * Get the player for whom this event is called.
-     * 
+     *
      * @return the Player
      */
     public Player getPlayer()

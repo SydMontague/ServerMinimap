@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_7_R1.util.CraftMagicNumbers;
 
 import de.craftlancer.serverminimap.nmscompat.INMSHandler;
+import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
 
 public class NMSHandler implements INMSHandler
 {
@@ -53,14 +54,14 @@ public class NMSHandler implements INMSHandler
     }
     
     @Override
-    public MaterialMapColorWrapper getColorNeutral()
+    public MaterialMapColorInterface getColorNeutral()
     {
         return colors.get(MaterialMapColor.b);
     }
     
     @SuppressWarnings("deprecation")
     @Override
-    public MaterialMapColorWrapper getBlockColor(Block block)
+    public MaterialMapColorInterface getBlockColor(Block block)
     {
         MaterialMapColor nms = CraftMagicNumbers.getBlock(block).f(block.getData());
         

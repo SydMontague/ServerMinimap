@@ -2,18 +2,19 @@ package de.craftlancer.serverminimap.data;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import de.craftlancer.serverminimap.ExtraCursor;
 
 public interface DataHandler
 {
-    public Map<String, List<ExtraCursor>> loadWaypoints();
+    public Map<UUID, List<ExtraCursor>> loadWaypoints();
     
-    public void saveWaypoints(Map<String, List<ExtraCursor>> waypoints);
+    public void saveWaypoints(Map<UUID, List<ExtraCursor>> waypoints);
     
-    public void addWaypoint(String player, int x, int z, String world);
+    public void addWaypoint(UUID player, int x, int z, String world, boolean visible);
     
-    public void removeWaypoint(String player, ExtraCursor c);
+    public void removeWaypoint(UUID player, ExtraCursor c);
     
-    public void updateVisible(String player, ExtraCursor c, boolean visible);
+    public void updateVisible(UUID player, ExtraCursor c, boolean visible);
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +21,7 @@ import de.craftlancer.serverminimap.event.MinimapExtraCursorEvent;
 public class WaypointHandler implements Listener
 {
     private ServerMinimap plugin;
-    private Map<String, List<ExtraCursor>> waypoints = new HashMap<String, List<ExtraCursor>>();
+    private Map<UUID, List<ExtraCursor>> waypoints = new HashMap<UUID, List<ExtraCursor>>();
     private DataHandler handler;
     
     public WaypointHandler(ServerMinimap plugin)
@@ -43,7 +44,7 @@ public class WaypointHandler implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onMinimapExtraCursor(MinimapExtraCursorEvent e)
     {
-        e.getCursors().addAll(getWaypoints(e.getPlayer().getName()));
+        e.getCursors().addAll(getWaypoints(e.getPlayer().getUniqueId()));
     }
     
     public void load()
@@ -56,7 +57,7 @@ public class WaypointHandler implements Listener
         handler.saveWaypoints(waypoints);
     }
     
-    public boolean addWaypoint(String player, int x, int z, String world)
+    public boolean addWaypoint(UUID player, int x, int z, String world)
     {
         if (player == null || world == null)
             return false;
@@ -64,13 +65,14 @@ public class WaypointHandler implements Listener
         if (!waypoints.containsKey(player))
             waypoints.put(player, new ArrayList<ExtraCursor>());
         
-        handler.addWaypoint(player, x, z, world);
+        handler.addWaypoint(player, x, z, world, true);
         return waypoints.get(player).add(new ExtraCursor(x, z, true, MapCursor.Type.WHITE_CROSS, (byte) 0, world, plugin.showDistantWaypoints()));
     }
     
-    public boolean removeWaypoint(String name, int index)
+    public boolean removeWaypoint(UUID name, int index)
     {
-        if (index < 0 || getWaypoints(name) == null || getWaypoints(name).size() == 0)
+        List<ExtraCursor> wp = getWaypoints(name);
+        if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
             return false;
         
         handler.removeWaypoint(name, getWaypoints(name).get(index));
@@ -78,15 +80,16 @@ public class WaypointHandler implements Listener
         return getWaypoints(name).remove(index) != null;
     }
     
-    public ExtraCursor getWaypoint(String name, int index)
+    public ExtraCursor getWaypoint(UUID name, int index)
     {
-        if (index < 0 || getWaypoints(name) == null || getWaypoints(name).size() == 0)
+        List<ExtraCursor> wp = getWaypoints(name);
+        if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
             return null;
         
         return getWaypoints(name).get(index);
     }
     
-    public List<ExtraCursor> getWaypoints(String player)
+    public List<ExtraCursor> getWaypoints(UUID player)
     {
         if (!waypoints.containsKey(player))
             waypoints.put(player, new ArrayList<ExtraCursor>());
@@ -94,9 +97,10 @@ public class WaypointHandler implements Listener
         return waypoints.get(player);
     }
     
-    public void updateVisibility(String name, int index, boolean hide)
+    public void updateVisibility(UUID name, int index, boolean hide)
     {
-        if (index < 0 || getWaypoints(name) == null || getWaypoints(name).size() == 0)
+        List<ExtraCursor> wp = getWaypoints(name);
+        if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
             return;
         
         ExtraCursor c = getWaypoint(name, index);

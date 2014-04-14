@@ -20,7 +20,7 @@ import de.craftlancer.serverminimap.waypoint.WaypointHandler;
  * The plugin is based on a request/idea by toxictroop and by the team at:
  * http://www.crossfiregaming.net/
  * http://forums.bukkit.org/threads/dynamic-maps.146024/
- * 
+ *
  * @author Syd
  */
 public class ServerMinimap extends JavaPlugin

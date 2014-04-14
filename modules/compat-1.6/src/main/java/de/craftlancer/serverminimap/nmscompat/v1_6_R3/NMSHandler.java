@@ -31,7 +31,7 @@ public class NMSHandler implements INMSHandler
     }
     
     @Override
-    public MaterialMapColorWrapper getColorNeutral()
+    public MaterialMapColorInterface getColorNeutral()
     {
         return colors.get(MaterialMapColor.b);
     }

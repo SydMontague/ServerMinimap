@@ -2,6 +2,7 @@ package de.craftlancer.serverminimap.waypoint;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import de.craftlancer.serverminimap.ExtraCursor;
 import de.craftlancer.serverminimap.ServerMinimap;
@@ -22,7 +23,7 @@ public class WaypointListCommand extends WaypointSubCommand
         else
         {
             int i = 1;
-            for (ExtraCursor w : plugin.getWaypointHandler().getWaypoints(sender.getName()))
+            for (ExtraCursor w : plugin.getWaypointHandler().getWaypoints(((Player) sender).getUniqueId()))
                 sender.sendMessage(i++ + " X: " + w.getX() + " Z: " + w.getZ() + " Visible: " + w.isVisible());
         }
     }

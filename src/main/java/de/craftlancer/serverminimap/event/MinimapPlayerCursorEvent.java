@@ -24,7 +24,7 @@ public class MinimapPlayerCursorEvent extends Event
     
     /**
      * Get the viewing player.
-     * 
+     *
      * @return the player who holds the minimap
      */
     public Player getViewer()
@@ -34,7 +34,7 @@ public class MinimapPlayerCursorEvent extends Event
     
     /**
      * Get the player which shall be shown on the minimap.
-     * 
+     *
      * @return the player which shall be on the minimap
      */
     public Player getViewed()
@@ -44,7 +44,7 @@ public class MinimapPlayerCursorEvent extends Event
     
     /**
      * Get the type of cursor, the viewer sees for the viewed player.
-     * 
+     *
      * @return the cursor type
      */
     public Type getType()
@@ -54,7 +54,7 @@ public class MinimapPlayerCursorEvent extends Event
     
     /**
      * Set the type of cursor, the viewer sees for the viewed player.
-     * 
+     *
      * @param type the type of cursor
      */
     public void setType(Type type)
@@ -65,7 +65,7 @@ public class MinimapPlayerCursorEvent extends Event
     /**
      * Get if the viewing player get a cursor displayed on his map for the
      * viewed player.
-     * 
+     *
      * @return true if shown, false if not
      */
     public boolean isCursorShown()
@@ -75,7 +75,7 @@ public class MinimapPlayerCursorEvent extends Event
     
     /**
      * Set whether the viewer gets a cursor for the viewed player on his map.
-     * 
+     *
      * @param display true if he shall see him, false if not
      */
     public void setCursorShown(boolean display)
