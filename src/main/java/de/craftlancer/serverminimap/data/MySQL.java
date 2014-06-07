@@ -268,7 +268,6 @@ public class MySQL implements DataHandler
                     updatestatement.setInt(3, c.getX());
                     updatestatement.setInt(4, c.getZ());
                     updatestatement.setString(5, c.getWorld());
-                    plugin.getLogger().info(updatestatement.toString());
                     updatestatement.execute();
                 }
                 catch (SQLException e)
