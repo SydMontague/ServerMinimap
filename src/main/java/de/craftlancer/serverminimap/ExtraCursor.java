@@ -24,6 +24,8 @@ public class ExtraCursor
      * @param visible - whether the cursor is visible or not
      * @param type - the type/shape of the cursor
      * @param direction - the direction the cursor is pointing at
+     * @param world - the world of the cursor
+     * @param outside - whether the cursor is shown at the edge of the map, if it isn't within the bounds of the map
      */
     public ExtraCursor(int x, int z, boolean visible, MapCursor.Type type, byte direction, String world, boolean outside)
     {
