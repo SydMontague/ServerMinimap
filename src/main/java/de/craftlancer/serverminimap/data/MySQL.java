@@ -27,6 +27,7 @@ public class MySQL implements DataHandler
     private String user;
     private String pass;
     private String database;
+    private String prefix;
     
     private Connection conn;
     
@@ -35,7 +36,7 @@ public class MySQL implements DataHandler
     PreparedStatement removestatement;
     PreparedStatement updatestatement;
     
-    public MySQL(ServerMinimap plugin, String host, int port, String user, String pass, String database)
+    public MySQL(ServerMinimap plugin, String host, int port, String user, String pass, String database, String prefix)
     {
         this.plugin = plugin;
         this.host = host;
@@ -43,17 +44,20 @@ public class MySQL implements DataHandler
         this.user = user;
         this.pass = pass;
         this.database = database;
+        this.prefix = prefix;
+        
+        String table = prefix + "waypoints";
         
         openConnection();
         try
         {
-            getstatement = getConnection().prepareStatement("SELECT * FROM waypoints");
-            insertstatement = getConnection().prepareStatement("INSERT INTO waypoints (player, x, z, world, visible) VALUES (?,?,?,?,?)");
-            removestatement = getConnection().prepareStatement("DELETE FROM waypoints WHERE player = ? AND x = ? AND  z = ? AND world = ?");
-            updatestatement = getConnection().prepareStatement("UPDATE waypoints SET visible = ? WHERE player = ? AND x = ? AND z = ? AND world = ?");
-            if (!conn.getMetaData().getTables(null, null, "waypoints", null).next())
+            getstatement = getConnection().prepareStatement("SELECT * FROM " + table);
+            insertstatement = getConnection().prepareStatement("INSERT INTO " + table + " (player, x, z, world, visible) VALUES (?,?,?,?,?)");
+            removestatement = getConnection().prepareStatement("DELETE FROM " + table + " WHERE player = ? AND x = ? AND  z = ? AND world = ?");
+            updatestatement = getConnection().prepareStatement("UPDATE " + table + " SET visible = ? WHERE player = ? AND x = ? AND z = ? AND world = ?");
+            if (!conn.getMetaData().getTables(null, null, table, null).next())
             {
-                PreparedStatement st = getConnection().prepareStatement("CREATE TABLE waypoints ( player varchar(36), x int, z int, world varchar(255), visible boolean )");
+                PreparedStatement st = getConnection().prepareStatement("CREATE TABLE " + table + " ( player varchar(36), x int, z int, world varchar(255), visible boolean )");
                 st.execute();
                 st.close();
             }

@@ -13,9 +13,15 @@ public class MinimapCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command arg1, String arg2, String[] arg3)
     {
         if (sender instanceof Player && !sender.hasPermission("minimap.command.minimap"))
+        {
+            sender.sendMessage("You are not able to run this command!");
             return true;
+        }
         
-        ((Player) sender).getInventory().addItem(new ItemStack(Material.MAP, 1, ServerMinimap.MAPID));
+        if (((Player) sender).getInventory().addItem(new ItemStack(Material.MAP, 1, ServerMinimap.MAPID)).isEmpty())
+            sender.sendMessage("Could not give you the map. Maybe your inventory is full?");
+        else
+            sender.sendMessage("There is your Map.");
         
         return true;
     }

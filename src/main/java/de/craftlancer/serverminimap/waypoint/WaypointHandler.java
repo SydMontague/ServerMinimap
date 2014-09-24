@@ -34,8 +34,9 @@ public class WaypointHandler implements Listener
             String user = plugin.getConfig().getString("mysql.user");
             String pass = plugin.getConfig().getString("mysql.pass");
             String database = plugin.getConfig().getString("mysql.database");
+            String prefix = plugin.getConfig().getString("mysql.table_prefix");
             
-            handler = new MySQL(plugin, host, port, user, pass, database);
+            handler = new MySQL(plugin, host, port, user, pass, database, prefix);
         }
         else
             handler = new ConfigHandler(plugin);
