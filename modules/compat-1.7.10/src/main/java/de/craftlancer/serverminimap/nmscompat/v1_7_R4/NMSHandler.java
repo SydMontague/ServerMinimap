@@ -1,4 +1,4 @@
-package de.craftlancer.serverminimap.nmscompat.v1_7_R2;
+package de.craftlancer.serverminimap.nmscompat.v1_7_R4;
 
 import java.util.HashMap;
 

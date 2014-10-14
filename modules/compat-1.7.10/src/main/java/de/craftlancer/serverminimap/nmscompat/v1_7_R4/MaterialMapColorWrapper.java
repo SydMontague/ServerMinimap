@@ -1,4 +1,4 @@
-package de.craftlancer.serverminimap.nmscompat.v1_7_R2;
+package de.craftlancer.serverminimap.nmscompat.v1_7_R4;
 
 import net.minecraft.server.v1_7_R4.MaterialMapColor;
 import de.craftlancer.serverminimap.nmscompat.MaterialMapColorInterface;
