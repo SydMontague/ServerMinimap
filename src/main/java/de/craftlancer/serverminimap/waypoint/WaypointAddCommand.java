@@ -26,6 +26,14 @@ public class WaypointAddCommand extends WaypointSubCommand
             int x;
             int z;
             String world;
+            String name;
+            
+            if (args.length == 2)
+                name = args[1];
+            else if(args.length >= 5)
+                name = args[4];
+            else
+                name = "";
             
             if (args.length >= 3)
                 try
@@ -49,13 +57,14 @@ public class WaypointAddCommand extends WaypointSubCommand
             else
                 world = ((Player) sender).getWorld().getName();
             
-            plugin.getWaypointHandler().addWaypoint(((Player) sender).getUniqueId(), x, z, world);
+            plugin.getWaypointHandler().addWaypoint(((Player) sender).getUniqueId(), x, z, world, name);
         }
     }
     
     @Override
     public void help(CommandSender sender)
     {
-        sender.sendMessage("/waypoint add for waypoint on your location, /waypoint add <x> <z> for remote waypoint.");
+        sender.sendMessage("/waypoint add [name] for waypoint on your location, /waypoint add <x> <z> [world] [name] for remote waypoint.");
+        sender.sendMessage("If you want a remote waypoint with a name you HAVE TO specify the world.");
     }
 }

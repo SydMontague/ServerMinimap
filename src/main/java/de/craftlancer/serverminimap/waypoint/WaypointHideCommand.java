@@ -1,10 +1,12 @@
 package de.craftlancer.serverminimap.waypoint;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.craftlancer.serverminimap.ExtraCursor;
 import de.craftlancer.serverminimap.ServerMinimap;
 
 public class WaypointHideCommand extends WaypointSubCommand
@@ -24,37 +26,29 @@ public class WaypointHideCommand extends WaypointSubCommand
             sender.sendMessage("You need to specify a index!");
         else
         {
-            int index;
+            Map<Integer, Waypoint> w = plugin.getWaypointHandler().getMatchingWaypoints(((Player) sender).getUniqueId(), args[1]);
             
-            try
+            if (w.isEmpty())
             {
-                index = Integer.parseInt(args[1]) - 1;
-            }
-            catch (NumberFormatException e)
-            {
-                sender.sendMessage(args[1] + " is not a number!");
+                sender.sendMessage("There is no waypoint with this index/name!");
                 return;
             }
             
-            ExtraCursor w = plugin.getWaypointHandler().getWaypoint(((Player) sender).getUniqueId(), index);
-            
-            if (w == null)
+            for (Entry<Integer, Waypoint> entry : w.entrySet())
             {
-                sender.sendMessage("There is no waypoint with this index!");
-                return;
+                Waypoint ww = entry.getValue();
+                int index = entry.getKey();
+                boolean hide;
+                
+                if (args.length >= 3 && args[2].equalsIgnoreCase("true"))
+                    hide = false;
+                else if (args.length >= 3 && args[2].equalsIgnoreCase("false"))
+                    hide = true;
+                else
+                    hide = !ww.isVisible();
+                
+                plugin.getWaypointHandler().updateVisibility(((Player) sender).getUniqueId(), index, hide);
             }
-            
-            boolean hide;
-            
-            if (args.length >= 3 && args[2].equalsIgnoreCase("true"))
-                hide = false;
-            else if (args.length >= 3 && args[2].equalsIgnoreCase("false"))
-                hide = true;
-            else
-                hide = !w.isVisible();
-            
-            plugin.getWaypointHandler().updateVisibility(((Player) sender).getUniqueId(), index, hide);
-            w.setVisible(hide);
         }
     }
     

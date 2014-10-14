@@ -15,9 +15,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.map.MapCursor.Type;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.craftlancer.serverminimap.ExtraCursor;
 import de.craftlancer.serverminimap.ServerMinimap;
+import de.craftlancer.serverminimap.waypoint.Waypoint;
 
+
+/* 
+ * TODO seriously rework the implementation, don't cache data on startup but request them when needed
+ * in order to allow 3rd party editing of the database (consistency)
+ * TODO add y coords to waypoints to allow more extended usage. (E.g. use a HoloPlugin to display waypoints)
+ * Both is planned AFTER 0.8.0 release, as it requires a mayor reowork of parts of the plugin.
+ */
 public class MySQL implements DataHandler
 {
     private ServerMinimap plugin;
@@ -35,6 +42,7 @@ public class MySQL implements DataHandler
     PreparedStatement insertstatement;
     PreparedStatement removestatement;
     PreparedStatement updatestatement;
+    PreparedStatement updatestatementName;
     
     public MySQL(ServerMinimap plugin, String host, int port, String user, String pass, String database, String prefix)
     {
@@ -46,18 +54,27 @@ public class MySQL implements DataHandler
         this.database = database;
         this.prefix = prefix;
         
-        String table = prefix + "waypoints";
+        String table = this.prefix + "waypoints";
         
         openConnection();
         try
         {
             getstatement = getConnection().prepareStatement("SELECT * FROM " + table);
-            insertstatement = getConnection().prepareStatement("INSERT INTO " + table + " (player, x, z, world, visible) VALUES (?,?,?,?,?)");
+            insertstatement = getConnection().prepareStatement("INSERT INTO " + table + " (player, x, z, world, visible, name) VALUES (?,?,?,?,?,?)");
             removestatement = getConnection().prepareStatement("DELETE FROM " + table + " WHERE player = ? AND x = ? AND  z = ? AND world = ?");
             updatestatement = getConnection().prepareStatement("UPDATE " + table + " SET visible = ? WHERE player = ? AND x = ? AND z = ? AND world = ?");
+            updatestatementName = getConnection().prepareStatement("UPDATE " + table + " SET name = ? WHERE player = ? AND x = ? AND z = ? AND world = ?");
+            //-> no table available (general init - pre 0.7.2 version have player varchar(255)
             if (!conn.getMetaData().getTables(null, null, table, null).next())
             {
-                PreparedStatement st = getConnection().prepareStatement("CREATE TABLE " + table + " ( player varchar(36), x int, z int, world varchar(255), visible boolean )");
+                PreparedStatement st = getConnection().prepareStatement("CREATE TABLE " + table + " ( player varchar(36), x int, z int, world varchar(255), visible boolean, name varchar(255) )");
+                st.execute();
+                st.close();
+            }
+            //-> name table not available (update from 0.7.5 and lower)
+            else if(!conn.getMetaData().getColumns(null, null, table, "name").next())
+            {
+                PreparedStatement st = getConnection().prepareStatement("ALTER TABLE " + table + " ADD name varchar(255)");
                 st.execute();
                 st.close();
             }
@@ -102,12 +119,13 @@ public class MySQL implements DataHandler
         return conn;
     }
     
+    @SuppressWarnings("deprecation")
     @Override
-    public Map<UUID, List<ExtraCursor>> loadWaypoints()
+    public Map<UUID, List<Waypoint>> loadWaypoints()
     {
         try
         {
-            Map<UUID, List<ExtraCursor>> waypoints = new HashMap<UUID, List<ExtraCursor>>();
+            Map<UUID, List<Waypoint>> waypoints = new HashMap<UUID, List<Waypoint>>();
             ResultSet rs = getstatement.executeQuery();
             
             while (rs.next())
@@ -137,16 +155,17 @@ public class MySQL implements DataHandler
                 int z = rs.getInt("z");
                 String world = rs.getString("world");
                 boolean visible = rs.getBoolean("visible");
+                String name = rs.getString("name");
                 
                 if (!waypoints.containsKey(uuid))
-                    waypoints.put(uuid, new ArrayList<ExtraCursor>());
+                    waypoints.put(uuid, new ArrayList<Waypoint>());
                 
-                waypoints.get(uuid).add(new ExtraCursor(x, z, visible, Type.WHITE_CROSS, (byte) 0, world, plugin.showDistantWaypoints()));
+                waypoints.get(uuid).add(new Waypoint(x, z, visible, Type.WHITE_CROSS, (byte) 0, world, plugin.showDistantWaypoints(), name));
                 
                 if (deleteOld)
                 {
                     removeOldWaypoint(player, x, z, world);
-                    addWaypoint(uuid, x, z, world, visible);
+                    addWaypoint(uuid, x, z, world, visible, name);
                 }
             }
             
@@ -168,11 +187,11 @@ public class MySQL implements DataHandler
                 e.printStackTrace();
             }
         }
-        return new HashMap<UUID, List<ExtraCursor>>();
+        return new HashMap<UUID, List<Waypoint>>();
     }
     
     @Override
-    public void saveWaypoints(Map<UUID, List<ExtraCursor>> waypoints)
+    public void saveWaypoints(Map<UUID, List<Waypoint>> waypoints)
     {
         try
         {
@@ -185,7 +204,7 @@ public class MySQL implements DataHandler
     }
     
     @Override
-    public void addWaypoint(final UUID player, final int x, final int z, final String world, final boolean visible)
+    public void addWaypoint(final UUID player, final int x, final int z, final String world, final boolean visible, final String name)
     {
         new BukkitRunnable()
         {
@@ -199,6 +218,7 @@ public class MySQL implements DataHandler
                     insertstatement.setInt(3, z);
                     insertstatement.setString(4, world);
                     insertstatement.setBoolean(5, visible);
+                    insertstatement.setString(6, name);
                     insertstatement.execute();
                 }
                 catch (SQLException e)
@@ -210,7 +230,7 @@ public class MySQL implements DataHandler
     }
     
     @Override
-    public void removeWaypoint(final UUID player, final ExtraCursor c)
+    public void removeWaypoint(final UUID player, final Waypoint c)
     {
         new BukkitRunnable()
         {
@@ -257,7 +277,7 @@ public class MySQL implements DataHandler
     }
     
     @Override
-    public void updateVisible(final UUID player, final ExtraCursor c, final boolean visible)
+    public void updateVisible(final UUID player, final Waypoint c, final boolean visible)
     {
         
         new BukkitRunnable()
@@ -268,6 +288,32 @@ public class MySQL implements DataHandler
                 try
                 {
                     updatestatement.setBoolean(1, visible);
+                    updatestatement.setString(2, player.toString());
+                    updatestatement.setInt(3, c.getX());
+                    updatestatement.setInt(4, c.getZ());
+                    updatestatement.setString(5, c.getWorld());
+                    updatestatement.execute();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+    
+    @Override
+    public void updateName(final UUID player, final Waypoint c, final String name)
+    {
+        
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    updatestatement.setString(1, name);
                     updatestatement.setString(2, player.toString());
                     updatestatement.setInt(3, c.getX());
                     updatestatement.setInt(4, c.getZ());

@@ -11,7 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.map.MapCursor;
 
-import de.craftlancer.serverminimap.ExtraCursor;
 import de.craftlancer.serverminimap.ServerMinimap;
 import de.craftlancer.serverminimap.data.ConfigHandler;
 import de.craftlancer.serverminimap.data.DataHandler;
@@ -21,7 +20,7 @@ import de.craftlancer.serverminimap.event.MinimapExtraCursorEvent;
 public class WaypointHandler implements Listener
 {
     private ServerMinimap plugin;
-    private Map<UUID, List<ExtraCursor>> waypoints = new HashMap<UUID, List<ExtraCursor>>();
+    private Map<UUID, List<Waypoint>> waypoints = new HashMap<UUID, List<Waypoint>>();
     private DataHandler handler;
     
     public WaypointHandler(ServerMinimap plugin)
@@ -58,21 +57,21 @@ public class WaypointHandler implements Listener
         handler.saveWaypoints(waypoints);
     }
     
-    public boolean addWaypoint(UUID player, int x, int z, String world)
+    public boolean addWaypoint(UUID player, int x, int z, String world, String name)
     {
         if (player == null || world == null)
             return false;
         
         if (!waypoints.containsKey(player))
-            waypoints.put(player, new ArrayList<ExtraCursor>());
+            waypoints.put(player, new ArrayList<Waypoint>());
         
-        handler.addWaypoint(player, x, z, world, true);
-        return waypoints.get(player).add(new ExtraCursor(x, z, true, MapCursor.Type.WHITE_CROSS, (byte) 0, world, plugin.showDistantWaypoints()));
+        handler.addWaypoint(player, x, z, world, true, "");
+        return waypoints.get(player).add(new Waypoint(x, z, true, MapCursor.Type.WHITE_CROSS, (byte) 0, world, plugin.showDistantWaypoints(), name));
     }
     
     public boolean removeWaypoint(UUID name, int index)
     {
-        List<ExtraCursor> wp = getWaypoints(name);
+        List<Waypoint> wp = getWaypoints(name);
         if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
             return false;
         
@@ -81,35 +80,62 @@ public class WaypointHandler implements Listener
         return getWaypoints(name).remove(index) != null;
     }
     
-    public ExtraCursor getWaypoint(UUID name, int index)
+    public Waypoint getWaypoint(UUID name, int index)
     {
-        List<ExtraCursor> wp = getWaypoints(name);
+        List<Waypoint> wp = getWaypoints(name);
         if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
             return null;
         
         return getWaypoints(name).get(index);
     }
     
-    public List<ExtraCursor> getWaypoints(UUID player)
+    public List<Waypoint> getWaypoints(UUID player)
     {
         if (!waypoints.containsKey(player))
-            waypoints.put(player, new ArrayList<ExtraCursor>());
+            waypoints.put(player, new ArrayList<Waypoint>());
         
         return waypoints.get(player);
     }
     
     public void updateVisibility(UUID name, int index, boolean hide)
     {
-        List<ExtraCursor> wp = getWaypoints(name);
+        List<Waypoint> wp = getWaypoints(name);
         if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
             return;
         
-        ExtraCursor c = getWaypoint(name, index);
+        Waypoint c = getWaypoint(name, index);
         
         if (c == null)
             return;
         
         handler.updateVisible(name, c, hide);
         c.setVisible(hide);
+    }
+    
+    public void updateName(UUID name, int index, String string)
+    {
+        List<Waypoint> wp = getWaypoints(name);
+        if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
+            return;
+        
+        Waypoint c = getWaypoint(name, index);
+        
+        if (c == null)
+            return;
+        
+        handler.updateName(name, c, string);
+        c.setName(string);
+    }
+    
+    public Map<Integer, Waypoint> getMatchingWaypoints(UUID name, String string)
+    {
+        List<Waypoint> waypoints = getWaypoints(name);
+        Map<Integer, Waypoint> match = new HashMap<Integer, Waypoint>();
+        
+        for (int i = 0; waypoints.size() > i; i++)
+            if (waypoints.get(i).getName().equalsIgnoreCase(string))
+                match.put(i + 1, waypoints.get(i));
+        
+        return match;
     }
 }

@@ -24,6 +24,8 @@ public class WaypointCommandHandler implements TabExecutor
         commands.put("add", new WaypointAddCommand("minimap.command.waypoint.add", plugin));
         commands.put("remove", new WaypointRemoveCommand("minimap.command.waypoint.remove", plugin));
         commands.put("hide", new WaypointHideCommand("minimap.command.waypoint.hide", plugin));
+        commands.put("getId", new WaypointGetIdCommand("minimap.command.waypoint.getid", plugin));
+        commands.put("setName", new WaypointSetNameCommand("minimap.command.waypoint.setname", plugin));
     }
     
     @Override

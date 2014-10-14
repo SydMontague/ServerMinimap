@@ -1,5 +1,7 @@
 package de.craftlancer.serverminimap.waypoint;
 
+import java.util.Map;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,25 +22,36 @@ public class WaypointRemoveCommand extends WaypointSubCommand
         if (!checkSender(sender))
             sender.sendMessage("You don't have permission for this command!");
         else if (args.length > 2)
-            sender.sendMessage("You need to specify a index!");
+            sender.sendMessage("You need to specify a index or a name!");
         else
         {
-            int index;
+            Map<Integer, Waypoint> matchingWaypoints = plugin.getWaypointHandler().getMatchingWaypoints(((Player) sender).getUniqueId(), args[1]);
+            /*
+             * int index;
+             * try
+             * {
+             * index = Integer.parseInt(args[1]) - 1;
+             * }
+             * catch (NumberFormatException e)
+             * {
+             * sender.sendMessage(args[1] + " is not a number!");
+             * return;
+             * }
+             */
             
-            try
+            if (matchingWaypoints.isEmpty())
             {
-                index = Integer.parseInt(args[1]) - 1;
-            }
-            catch (NumberFormatException e)
-            {
-                sender.sendMessage(args[1] + " is not a number!");
+                sender.sendMessage("No matching waypoint found!");
                 return;
             }
             
-            if (!plugin.getWaypointHandler().removeWaypoint(((Player) sender).getUniqueId(), index))
-                sender.sendMessage("Failed to remove Waypoint. (Wrong index?)");
-            else
-                sender.sendMessage("Waypoint removed!");
+            int i = 0;
+            
+            for (Integer index : matchingWaypoints.keySet())
+                if (plugin.getWaypointHandler().removeWaypoint(((Player) sender).getUniqueId(), index))
+                    i++;
+            
+            sender.sendMessage(i + " Waypoint(s) removed!");
         }
     }
     

@@ -16,7 +16,11 @@ import org.bukkit.map.MapCursor;
 
 import de.craftlancer.serverminimap.ExtraCursor;
 import de.craftlancer.serverminimap.ServerMinimap;
+import de.craftlancer.serverminimap.waypoint.Waypoint;
 
+/*
+ * TODO update to more extensible system that allows easier updates and new features
+ */
 public class ConfigHandler implements DataHandler
 {
     private File file;
@@ -30,10 +34,11 @@ public class ConfigHandler implements DataHandler
         config = YamlConfiguration.loadConfiguration(file);
     }
     
+    @SuppressWarnings("deprecation")
     @Override
-    public Map<UUID, List<ExtraCursor>> loadWaypoints()
+    public Map<UUID, List<Waypoint>> loadWaypoints()
     {
-        Map<UUID, List<ExtraCursor>> map = new HashMap<UUID, List<ExtraCursor>>();
+        Map<UUID, List<Waypoint>> map = new HashMap<UUID, List<Waypoint>>();
         
         boolean requiresUpdaterSave = false;
         
@@ -62,7 +67,7 @@ public class ConfigHandler implements DataHandler
             }
             
             if (!map.containsKey(uuid))
-                map.put(uuid, new ArrayList<ExtraCursor>());
+                map.put(uuid, new ArrayList<Waypoint>());
             
             for (String value : config.getStringList(key))
             {
@@ -75,7 +80,8 @@ public class ConfigHandler implements DataHandler
                 int z;
                 
                 boolean visible = arr.length >= 4 ? !arr[3].equalsIgnoreCase("false") : true;
-
+                String name = arr.length >= 5 ? arr[4] : "";
+                
                 try
                 {
                     x = Integer.parseInt(arr[0]);
@@ -87,7 +93,7 @@ public class ConfigHandler implements DataHandler
                     continue;
                 }
                 
-                map.get(uuid).add(new ExtraCursor(x, z, visible, MapCursor.Type.WHITE_CROSS, (byte) 0, arr[2], plugin.showDistantWaypoints()));
+                map.get(uuid).add(new Waypoint(x, z, visible, MapCursor.Type.WHITE_CROSS, (byte) 0, arr[2], plugin.showDistantWaypoints(), name));
             }
             
             if (updated)
@@ -101,9 +107,9 @@ public class ConfigHandler implements DataHandler
     }
     
     @Override
-    public void saveWaypoints(Map<UUID, List<ExtraCursor>> waypoints)
+    public void saveWaypoints(Map<UUID, List<Waypoint>> waypoints)
     {
-        for (Entry<UUID, List<ExtraCursor>> e : waypoints.entrySet())
+        for (Entry<UUID, List<Waypoint>> e : waypoints.entrySet())
         {
             List<String> str = new ArrayList<String>((int) (waypoints.size() * 1.25));
             for (ExtraCursor c : e.getValue())
@@ -124,17 +130,22 @@ public class ConfigHandler implements DataHandler
     }
     
     @Override
-    public void addWaypoint(UUID player, int x, int z, String world, boolean visible)
+    public void removeWaypoint(UUID player, Waypoint c)
     {
     }
     
     @Override
-    public void removeWaypoint(UUID player, ExtraCursor c)
+    public void updateVisible(UUID player, Waypoint c, boolean visible)
     {
     }
     
     @Override
-    public void updateVisible(UUID player, ExtraCursor c, boolean visible)
+    public void addWaypoint(UUID player, int x, int z, String world, boolean visible, String name)
+    {
+    }
+    
+    @Override
+    public void updateName(UUID player, Waypoint c, String name)
     {
     }
 }

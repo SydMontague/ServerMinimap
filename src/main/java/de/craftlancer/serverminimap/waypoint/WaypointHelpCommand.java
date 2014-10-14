@@ -22,8 +22,11 @@ public class WaypointHelpCommand extends WaypointSubCommand
         {
             sender.sendMessage("/waypoint help [command] - this command");
             sender.sendMessage("/waypoint add [x] [z] - adds a new waypoint to your position or to x,z");
+            sender.sendMessage("/waypoint hide <id/name> - toggle visibility of a waypoint.");
+            sender.sendMessage("/waypoint setname <id> <newName> - rename a waypoint.");
+            sender.sendMessage("/waypoint getid <name> - Get the waypoint ids, that match the given name.");
             sender.sendMessage("/waypoint list - list all your waypoints");
-            sender.sendMessage("/waypoint remove <index> - remove the waypoint with the given index.");
+            sender.sendMessage("/waypoint remove <id/name> - remove the waypoint with the given index.");
         }
     }
     
