@@ -18,7 +18,7 @@ public class MinimapCommand implements CommandExecutor
             return true;
         }
         
-        if (((Player) sender).getInventory().addItem(new ItemStack(Material.MAP, 1, ServerMinimap.MAPID)).isEmpty())
+        if (!((Player) sender).getInventory().addItem(new ItemStack(Material.MAP, 1, ServerMinimap.MAPID)).isEmpty())
             sender.sendMessage("Could not give you the map. Maybe your inventory is full?");
         else
             sender.sendMessage("There is your Map.");
