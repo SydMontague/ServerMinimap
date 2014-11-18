@@ -18,7 +18,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import de.craftlancer.serverminimap.ServerMinimap;
 import de.craftlancer.serverminimap.waypoint.Waypoint;
 
-
 /* 
  * TODO seriously rework the implementation, don't cache data on startup but request them when needed
  * in order to allow 3rd party editing of the database (consistency)
@@ -64,15 +63,15 @@ public class MySQL implements DataHandler
             removestatement = getConnection().prepareStatement("DELETE FROM " + table + " WHERE player = ? AND x = ? AND  z = ? AND world = ?");
             updatestatement = getConnection().prepareStatement("UPDATE " + table + " SET visible = ? WHERE player = ? AND x = ? AND z = ? AND world = ?");
             updatestatementName = getConnection().prepareStatement("UPDATE " + table + " SET name = ? WHERE player = ? AND x = ? AND z = ? AND world = ?");
-            //-> no table available (general init - pre 0.7.2 version have player varchar(255)
+            // -> no table available (general init - pre 0.7.2 version have player varchar(255)
             if (!conn.getMetaData().getTables(null, null, table, null).next())
             {
                 PreparedStatement st = getConnection().prepareStatement("CREATE TABLE " + table + " ( player varchar(36), x int, z int, world varchar(255), visible boolean, name varchar(255) )");
                 st.execute();
                 st.close();
             }
-            //-> name table not available (update from 0.7.5 and lower)
-            else if(!conn.getMetaData().getColumns(null, null, table, "name").next())
+            // -> name table not available (update from 0.7.5 and lower)
+            else if (!conn.getMetaData().getColumns(null, null, table, "name").next())
             {
                 PreparedStatement st = getConnection().prepareStatement("ALTER TABLE " + table + " ADD name varchar(255)");
                 st.execute();
@@ -303,7 +302,7 @@ public class MySQL implements DataHandler
     }
     
     @Override
-    public void updateName(final UUID player, final Waypoint c, final String name)
+    public void updateName(final UUID player, final Waypoint c)
     {
         
         new BukkitRunnable()
@@ -313,7 +312,7 @@ public class MySQL implements DataHandler
             {
                 try
                 {
-                    updatestatement.setString(1, name);
+                    updatestatement.setString(1, c.getName());
                     updatestatement.setString(2, player.toString());
                     updatestatement.setInt(3, c.getX());
                     updatestatement.setInt(4, c.getZ());

@@ -1,7 +1,6 @@
 package de.craftlancer.serverminimap.waypoint;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -30,14 +29,12 @@ public class WaypointHideCommand extends WaypointSubCommand
             
             if (w.isEmpty())
             {
-                sender.sendMessage("There is no waypoint with this index/name!");
+                sender.sendMessage("There are no waypoints with this index/name!");
                 return;
             }
             
-            for (Entry<Integer, Waypoint> entry : w.entrySet())
+            for (Waypoint entry : w.values())
             {
-                Waypoint ww = entry.getValue();
-                int index = entry.getKey();
                 boolean hide;
                 
                 if (args.length >= 3 && args[2].equalsIgnoreCase("true"))
@@ -45,17 +42,19 @@ public class WaypointHideCommand extends WaypointSubCommand
                 else if (args.length >= 3 && args[2].equalsIgnoreCase("false"))
                     hide = true;
                 else
-                    hide = !ww.isVisible();
+                    hide = !entry.isVisible();
                 
-                plugin.getWaypointHandler().updateVisibility(((Player) sender).getUniqueId(), index, hide);
+                entry.setVisible(hide);
+                plugin.getWaypointHandler().getDataHandler().updateVisible(((Player) sender).getUniqueId(), entry, hide);
             }
+            sender.sendMessage("Changed visibility of " + w.size() + " waypoints!");
         }
     }
     
     @Override
     public void help(CommandSender sender)
     {
-        sender.sendMessage("/waypoint hide <index> [true/false] - hide/unhide a waypoint with an index");
+        sender.sendMessage("/waypoint hide <index|name> [true/false] - hide/unhide a waypoint with an index or name");
     }
     
 }

@@ -15,7 +15,7 @@ public class WaypointGetIdCommand extends WaypointSubCommand
     {
         super(permission, plugin, false);
     }
-
+    
     @Override
     protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
@@ -29,7 +29,7 @@ public class WaypointGetIdCommand extends WaypointSubCommand
             
             sender.sendMessage(args[1] + " matches to the following IDs: ");
             StringBuilder str = new StringBuilder();
-            for(Integer i : matchingWaypoints.keySet())
+            for (Integer i : matchingWaypoints.keySet())
                 str.append(i).append(" ");
             
             sender.sendMessage(str.toString());

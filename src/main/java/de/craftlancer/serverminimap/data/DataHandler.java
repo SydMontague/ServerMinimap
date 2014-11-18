@@ -16,7 +16,7 @@ public interface DataHandler
     
     public void removeWaypoint(UUID player, Waypoint c);
     
-    public void updateVisible(UUID player, Waypoint c, boolean visible); 
+    public void updateVisible(UUID player, Waypoint c, boolean visible);
     
-    public void updateName(UUID player, Waypoint  c, String name);
+    public void updateName(UUID player, Waypoint c);
 }

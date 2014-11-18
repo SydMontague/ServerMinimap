@@ -16,7 +16,7 @@ public class Waypoint extends ExtraCursor
     
     /**
      * Get the name of the waypoint.
-     * 
+     *
      * @return the name of the waypoint, if not set it returns "". (Empty String)
      */
     public String getName()
@@ -27,9 +27,9 @@ public class Waypoint extends ExtraCursor
     /**
      * Set the name of the waypoint.
      * Names are NOT unique.
-     * 
+     *
      * @param name
-     *            the new name
+     *        the new name
      */
     public void setName(String name)
     {

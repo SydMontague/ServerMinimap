@@ -35,7 +35,10 @@ public class WaypointSetNameCommand extends WaypointSubCommand
                 return;
             }
             
-            plugin.getWaypointHandler().updateName(((Player) sender).getUniqueId(), index, args[2]);
+            Waypoint wp = plugin.getWaypointHandler().getWaypoint(((Player) sender).getUniqueId(), index - 1);
+            wp.setName(args[2]);
+            plugin.getWaypointHandler().getDataHandler().updateName(((Player) sender).getUniqueId(), wp);
+            sender.sendMessage("Name set!");
         }
     }
     

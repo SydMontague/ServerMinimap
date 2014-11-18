@@ -26,18 +26,6 @@ public class WaypointRemoveCommand extends WaypointSubCommand
         else
         {
             Map<Integer, Waypoint> matchingWaypoints = plugin.getWaypointHandler().getMatchingWaypoints(((Player) sender).getUniqueId(), args[1]);
-            /*
-             * int index;
-             * try
-             * {
-             * index = Integer.parseInt(args[1]) - 1;
-             * }
-             * catch (NumberFormatException e)
-             * {
-             * sender.sendMessage(args[1] + " is not a number!");
-             * return;
-             * }
-             */
             
             if (matchingWaypoints.isEmpty())
             {
@@ -48,7 +36,7 @@ public class WaypointRemoveCommand extends WaypointSubCommand
             int i = 0;
             
             for (Integer index : matchingWaypoints.keySet())
-                if (plugin.getWaypointHandler().removeWaypoint(((Player) sender).getUniqueId(), index))
+                if (plugin.getWaypointHandler().removeWaypoint(((Player) sender).getUniqueId(), index - 1))
                     i++;
             
             sender.sendMessage(i + " Waypoint(s) removed!");

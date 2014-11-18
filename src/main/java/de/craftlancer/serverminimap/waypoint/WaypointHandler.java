@@ -41,6 +41,11 @@ public class WaypointHandler implements Listener
             handler = new ConfigHandler(plugin);
     }
     
+    public DataHandler getDataHandler()
+    {
+        return handler;
+    }
+    
     @EventHandler(priority = EventPriority.LOWEST)
     public void onMinimapExtraCursor(MinimapExtraCursorEvent e)
     {
@@ -72,7 +77,7 @@ public class WaypointHandler implements Listener
     public boolean removeWaypoint(UUID name, int index)
     {
         List<Waypoint> wp = getWaypoints(name);
-        if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
+        if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index || getWaypoints(name).contains(index))
             return false;
         
         handler.removeWaypoint(name, getWaypoints(name).get(index));
@@ -97,44 +102,14 @@ public class WaypointHandler implements Listener
         return waypoints.get(player);
     }
     
-    public void updateVisibility(UUID name, int index, boolean hide)
-    {
-        List<Waypoint> wp = getWaypoints(name);
-        if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
-            return;
-        
-        Waypoint c = getWaypoint(name, index);
-        
-        if (c == null)
-            return;
-        
-        handler.updateVisible(name, c, hide);
-        c.setVisible(hide);
-    }
-    
-    public void updateName(UUID name, int index, String string)
-    {
-        List<Waypoint> wp = getWaypoints(name);
-        if (index < 0 || wp == null || wp.size() == 0 || wp.size() < index)
-            return;
-        
-        Waypoint c = getWaypoint(name, index);
-        
-        if (c == null)
-            return;
-        
-        handler.updateName(name, c, string);
-        c.setName(string);
-    }
-    
     public Map<Integer, Waypoint> getMatchingWaypoints(UUID name, String string)
     {
-        List<Waypoint> waypoints = getWaypoints(name);
+        List<Waypoint> localWaypoints = getWaypoints(name);
         Map<Integer, Waypoint> match = new HashMap<Integer, Waypoint>();
         
-        for (int i = 0; waypoints.size() > i; i++)
-            if (waypoints.get(i).getName().equalsIgnoreCase(string))
-                match.put(i + 1, waypoints.get(i));
+        for (int i = 0; localWaypoints.size() > i; i++)
+            if (localWaypoints.get(i).getName().equalsIgnoreCase(string) || String.valueOf(i + 1).equals(string))
+                match.put(i + 1, localWaypoints.get(i));
         
         return match;
     }

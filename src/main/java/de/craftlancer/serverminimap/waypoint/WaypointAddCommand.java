@@ -30,7 +30,7 @@ public class WaypointAddCommand extends WaypointSubCommand
             
             if (args.length == 2)
                 name = args[1];
-            else if(args.length >= 5)
+            else if (args.length >= 5)
                 name = args[4];
             else
                 name = "";
@@ -58,6 +58,7 @@ public class WaypointAddCommand extends WaypointSubCommand
                 world = ((Player) sender).getWorld().getName();
             
             plugin.getWaypointHandler().addWaypoint(((Player) sender).getUniqueId(), x, z, world, name);
+            sender.sendMessage("Waypoint added!");
         }
     }
     

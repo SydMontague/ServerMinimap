@@ -145,7 +145,7 @@ public class ConfigHandler implements DataHandler
     }
     
     @Override
-    public void updateName(UUID player, Waypoint c, String name)
+    public void updateName(UUID player, Waypoint c)
     {
     }
 }
