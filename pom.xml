@@ -33,12 +33,18 @@
     <module>modules/compat-1.7.5</module>
     <module>modules/compat-1.7.8</module>
     <module>modules/compat-1.7.10</module>
+    <module>modules/compat-1.8</module>
     <module>modules/ServerMinimap</module>
   </modules>
 
   <repositories>
     <repository>
       <id>bukkit-repo</id>
+      <url>http://repo.bukkit.org/content/groups/public/</url>
+    </repository>
+    
+    <repository>
+      <id>spigot-repo</id>
       <url>http://repo.bukkit.org/content/groups/public/</url>
     </repository>
 
