@@ -52,6 +52,11 @@
       <artifactId>serverminimap-v1.7-R4</artifactId>
       <version>v1.7-R4</version>
     </dependency>
+    <dependency>
+      <groupId>de.craftlancer</groupId>
+      <artifactId>serverminimap-v1.8-R1</artifactId>
+      <version>v1.8-R1</version>
+    </dependency>
   </dependencies>
 
   <build>
