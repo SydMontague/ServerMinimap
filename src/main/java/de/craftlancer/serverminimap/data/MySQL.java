@@ -101,7 +101,7 @@ public class MySQL implements DataHandler
     {
         try
         {
-            return conn.isValid(1);
+            return !conn.isValid(1);
         }
         catch (SQLException e)
         {
