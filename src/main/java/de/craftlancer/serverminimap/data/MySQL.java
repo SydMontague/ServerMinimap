@@ -22,7 +22,7 @@ import de.craftlancer.serverminimap.waypoint.Waypoint;
  * TODO seriously rework the implementation, don't cache data on startup but request them when needed
  * in order to allow 3rd party editing of the database (consistency)
  * TODO add y coords to waypoints to allow more extended usage. (E.g. use a HoloPlugin to display waypoints)
- * Both is planned AFTER 0.8.0 release, as it requires a mayor reowork of parts of the plugin.
+ * Both is planned AFTER 0.8.0 release, as it requires a mayor rework of parts of the plugin.
  */
 public class MySQL implements DataHandler
 {
