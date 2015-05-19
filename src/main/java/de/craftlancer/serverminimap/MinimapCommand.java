@@ -11,8 +11,8 @@ public class MinimapCommand implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command arg1, String arg2, String[] arg3)
-    {
-        if (sender instanceof Player && !sender.hasPermission("minimap.command.minimap"))
+    {        
+        if (!(sender instanceof Player) || !sender.hasPermission("minimap.command.minimap"))
         {
             sender.sendMessage("You are not able to run this command!");
             return true;
