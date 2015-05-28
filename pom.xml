@@ -49,11 +49,6 @@
       <id>Plugin Metrics</id>
       <url>http://repo.mcstats.org/content/repositories/public</url>
     </repository>
-
-    <repository>
-      <id>local-repo</id>
-      <url>~/.m2/repository</url>
-    </repository>
   </repositories>
 
   <dependencies>
