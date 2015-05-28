@@ -39,15 +39,10 @@
     <module>modules/ServerMinimap</module>
   </modules>
 
-  <repositories>
-    <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public/</url>
-    </repository>
-    
+  <repositories>    
     <repository>
       <id>spigot-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public/</url>
+      <url>http://hub.spigotmc.net/nexus/content/groups/public/</url>
     </repository>
 
     <repository>
@@ -60,13 +55,13 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.7.9-R0.2</version>
+      <version>1.8.6-R0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.7.10-R0.1-SNAPSHOT</version>
+      <version>1.8.6-R0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
