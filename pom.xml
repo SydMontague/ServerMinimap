@@ -39,7 +39,7 @@
     <module>modules/ServerMinimap</module>
   </modules>
 
-  <repositories>    
+  <repositories>
     <repository>
       <id>spigot-repo</id>
       <url>http://hub.spigotmc.org/nexus/content/groups/public/</url>
@@ -48,6 +48,11 @@
     <repository>
       <id>Plugin Metrics</id>
       <url>http://repo.mcstats.org/content/repositories/public</url>
+    </repository>
+
+    <repository>
+      <id>local-repo</id>
+      <url>~/.m2/repository</url>
     </repository>
   </repositories>
 
