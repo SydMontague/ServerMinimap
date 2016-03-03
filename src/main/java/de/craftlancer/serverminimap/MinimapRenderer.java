@@ -128,6 +128,8 @@ public class MinimapRenderer extends MapRenderer implements Listener
                     canvas.setPixel(i, j, (byte) 0);
                     if (queue.size() < 200)
                         addToQueue(x, z, true, player.getWorld().getName());
+                    else
+                        break;
                 }
             }
         

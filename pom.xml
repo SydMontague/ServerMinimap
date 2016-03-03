@@ -36,6 +36,7 @@
     <module>modules/compat-1.8</module>
     <module>modules/compat-1.8.3</module>
     <module>modules/compat-1.8.4</module>
+    <module>modules/compat-1.9</module>
     <module>modules/ServerMinimap</module>
   </modules>
 
@@ -55,19 +56,19 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.8.6-R0.1-SNAPSHOT</version>
+      <version>1.9-R0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.8.6-R0.1-SNAPSHOT</version>
+      <version>1.9-R0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>org.mcstats.bukkit</groupId>
       <artifactId>metrics</artifactId>
-      <version>R7</version>
+      <version>R8-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -79,8 +80,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
     </plugins>
