@@ -209,7 +209,9 @@ public class ServerMinimap extends JavaPlugin
             for (MapRenderer r : map.getRenderers())
                 map.removeRenderer(r);
             
-            map.addRenderer(new MinimapRenderer(SCALE, CPR, this));
+            MinimapRenderer renderer = getNMSHandler().hasTwoHands() ? new TwoHandedRenderer(SCALE, CPR, this) : new OneHandedRenderer(SCALE, CPR, this);
+            
+            map.addRenderer(renderer);
         }
         
         getLogger().info("Created Minimap with ID " + MAPID + ". Use /give <name> MAP 1 " + MAPID + " to get the map as item. (Vanilla command)");

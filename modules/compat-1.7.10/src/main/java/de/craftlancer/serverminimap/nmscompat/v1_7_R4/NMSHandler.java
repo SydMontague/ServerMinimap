@@ -70,5 +70,9 @@ public class NMSHandler implements INMSHandler
         
         return colors.get(CraftMagicNumbers.getBlock(block).f(block.getData()));
     }
-    
+
+    @Override
+    public boolean hasTwoHands() {
+        return false;
+    }
 }

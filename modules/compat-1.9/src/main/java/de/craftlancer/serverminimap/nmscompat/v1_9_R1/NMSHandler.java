@@ -70,5 +70,10 @@ public class NMSHandler implements INMSHandler
         
         return colors.get(nms);
     }
+
+    @Override
+    public boolean hasTwoHands() {
+        return true;
+    }
     
 }

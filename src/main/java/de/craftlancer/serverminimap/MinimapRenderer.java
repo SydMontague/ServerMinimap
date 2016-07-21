@@ -8,7 +8,6 @@ import java.util.Queue;
 import java.util.TreeMap;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -80,10 +79,7 @@ public class MinimapRenderer extends MapRenderer implements Listener
     @SuppressWarnings("deprecation")
     @Override
     public void render(MapView map, MapCanvas canvas, Player player)
-    {
-        if (!(player.getItemInHand().getType() == Material.MAP && player.getItemInHand().getDurability() == ServerMinimap.MAPID))
-            return;
-        
+    {        
         if (player.getWorld().hasMetadata("minimap.disabled"))
             return;
         
