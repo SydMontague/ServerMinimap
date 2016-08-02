@@ -3,6 +3,7 @@ package de.craftlancer.serverminimap.nmscompat.v1_8_R3;
 import java.util.HashMap;
 
 import net.minecraft.server.v1_8_R3.MaterialMapColor;
+import net.minecraft.server.v1_8_R3.BlockPosition;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -63,7 +64,9 @@ public class NMSHandler implements INMSHandler
     public MaterialMapColorInterface getBlockColor(Block block)
     {
         net.minecraft.server.v1_8_R3.Block nmsblock = CraftMagicNumbers.getBlock(block);
-        MaterialMapColor nms = nmsblock.g(nmsblock.getBlockData());
+        org.bukkit.craftbukkit.v1_8_R3.CraftChunk w = (org.bukkit.craftbukkit.v1_8_R3.CraftChunk) block.getChunk();
+        
+        MaterialMapColor nms = nmsblock.g(w.getHandle().getBlockData(new BlockPosition(block.getX(), block.getY(), block.getZ())));
         
         if (!colors.containsKey(nms))
             Bukkit.getLogger().severe("[ServerMinimap] unknown color, error in NMSHandler - please report to author!");
