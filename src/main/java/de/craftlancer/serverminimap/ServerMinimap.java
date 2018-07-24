@@ -1,7 +1,6 @@
 package de.craftlancer.serverminimap;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -9,8 +8,6 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
-import org.mcstats.Metrics.Graph;
 
 import de.craftlancer.serverminimap.nmscompat.INMSHandler;
 import de.craftlancer.serverminimap.waypoint.WaypointCommandHandler;
@@ -52,57 +49,6 @@ public class ServerMinimap extends JavaPlugin
         
         getCommand("waypoint").setExecutor(new WaypointCommandHandler(this));
         getCommand("minimap").setExecutor(new MinimapCommand());
-        
-        try
-        {
-            Metrics metrics = new Metrics(this);
-            
-            Graph scaleGraph = metrics.createGraph("Scale");
-            scaleGraph.addPlotter(new Metrics.Plotter(String.valueOf(SCALE))
-            {
-                
-                @Override
-                public int getValue()
-                {
-                    return 1;
-                }
-            });
-            
-            Graph cprGraph = metrics.createGraph("Chunks per Run");
-            cprGraph.addPlotter(new Metrics.Plotter(String.valueOf(CPR))
-            {
-                @Override
-                public int getValue()
-                {
-                    return 1;
-                }
-            });
-            
-            Graph rptGraph = metrics.createGraph("Render per Ticks");
-            rptGraph.addPlotter(new Metrics.Plotter(String.valueOf(runPerTicks))
-            {
-                @Override
-                public int getValue()
-                {
-                    return 1;
-                }
-            });
-            
-            Graph ftGraph = metrics.createGraph("Fastsend per Ticks");
-            ftGraph.addPlotter(new Metrics.Plotter(String.valueOf(fastTicks))
-            {
-                @Override
-                public int getValue()
-                {
-                    return 1;
-                }
-            });
-            
-            metrics.start();
-        }
-        catch (IOException e)
-        {
-        }
     }
     
     private void setupNMSHandler()

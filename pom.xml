@@ -12,19 +12,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <distributionManagement>
-    <repository>
-      <name>Craftlancer Releases</name>
-      <id>releases</id>
-      <url>http://repo.craftlancer.de/content/repositories/releases</url>
-    </repository>
-    <snapshotRepository>
-      <name>Craftlancer Snapshots</name>
-      <id>snapshots</id>
-      <url>http://repo.craftlancer.de/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <modules>
     <module>modules/CompatHandler</module>
     <module>modules/compat-1.5</module>
@@ -41,6 +28,7 @@
     <module>modules/compat-1.10</module>
     <module>modules/compat-1.11</module>
     <module>modules/compat-1.12</module>
+    <module>modules/compat-1.13</module>
     <module>modules/ServerMinimap</module>
   </modules>
 
@@ -48,11 +36,6 @@
     <repository>
       <id>spigot-repo</id>
       <url>http://hub.spigotmc.org/nexus/content/groups/public/</url>
-    </repository>
-
-    <repository>
-      <id>Plugin Metrics</id>
-      <url>http://repo.mcstats.org/content/repositories/public</url>
     </repository>
   </repositories>
 
@@ -67,13 +50,6 @@
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
       <version>1.9-R0.1-SNAPSHOT</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mcstats.bukkit</groupId>
-      <artifactId>metrics</artifactId>
-      <version>R8-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 

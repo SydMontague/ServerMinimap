@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>serverminimap-plugin</artifactId>
   <groupId>de.craftlancer</groupId>
-  <version>0.7.15</version>
+  <version>0.7.16</version>
   <name>ServerMinimap</name>
   <modelVersion>4.0.0</modelVersion>
 
@@ -91,6 +91,11 @@
       <groupId>de.craftlancer</groupId>
       <artifactId>serverminimap-v1.12-R1</artifactId>
       <version>v1.12-R1</version>
+    </dependency>
+    <dependency>
+      <groupId>de.craftlancer</groupId>
+      <artifactId>serverminimap-v1.13-R1</artifactId>
+      <version>v1.13-R1</version>
     </dependency>
   </dependencies>
 
