@@ -29,6 +29,7 @@
     <module>modules/compat-1.11</module>
     <module>modules/compat-1.12</module>
     <module>modules/compat-1.13</module>
+    <module>modules/compat-1.13.1</module>
     <module>modules/ServerMinimap</module>
   </modules>
 
