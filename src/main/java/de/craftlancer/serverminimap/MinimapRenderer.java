@@ -363,8 +363,6 @@ public class MinimapRenderer extends MapRenderer implements Listener
         {
             case LAVA:
             case WATER:
-            case STATIONARY_LAVA:
-            case STATIONARY_WATER:
                 handleBlockEvent(e.getBlock());
                 break;
             default:

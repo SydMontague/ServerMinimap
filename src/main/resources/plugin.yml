@@ -3,6 +3,7 @@ main: de.craftlancer.serverminimap.ServerMinimap
 version: ${project.version}
 author: SydMontague
 description: A serverside Minimap via maps.
+api-version: 1.13
 permissions:
     minimap.fastupdate:
         description: Updates the minimap of the player much faster
