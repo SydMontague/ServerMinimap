@@ -30,6 +30,7 @@
     <module>modules/compat-1.12</module>
     <module>modules/compat-1.13</module>
     <module>modules/compat-1.13.1</module>
+    <module>modules/compat-1.14</module>
     <module>modules/ServerMinimap</module>
   </modules>
 
@@ -44,13 +45,13 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.13.1-R0.1-SNAPSHOT</version>
+      <version>1.14-R0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.13.1-R0.1-SNAPSHOT</version>
+      <version>1.14-R0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 

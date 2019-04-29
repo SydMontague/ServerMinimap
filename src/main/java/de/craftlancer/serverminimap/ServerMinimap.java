@@ -22,7 +22,7 @@ import de.craftlancer.serverminimap.waypoint.WaypointHandler;
  */
 public class ServerMinimap extends JavaPlugin
 {
-    public static short MAPID = 0;
+    public static int MAPID = 0;
     private FileConfiguration config;
     private int SCALE = 0;
     private int CPR = 8;
