@@ -4,8 +4,8 @@
   xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <name>compat-1.16.2</name>
-  <artifactId>serverminimap-v1.16.2-R1</artifactId>
-  <version>v1.16.2-R1</version>
+  <artifactId>serverminimap-v1.16-R2</artifactId>
+  <version>v1.16-R2</version>
 
   <parent>
     <artifactId>serverminimap</artifactId>
@@ -18,7 +18,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot</artifactId>
-      <version>1.16.2-R0.1-SNAPSHOT</version>
+      <version>1.16.3-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>de.craftlancer</groupId>
